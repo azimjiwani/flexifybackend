@@ -4,14 +4,13 @@ import pymongo
 import config
 import json
 import requests
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
+import os
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
-username = "azimjiwani"
-password = "oZscwEbpBFXPKkFu"
+username  = os.environ.get('username')
+password = os.environ.get('password')
 
 connection_url = "mongodb+srv://{}:{}@projectdata.0iwnpaz.mongodb.net/?retryWrites=true&w=majority".format(username, password)
 client = pymongo.MongoClient(connection_url)
