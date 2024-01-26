@@ -16,6 +16,10 @@ connection_url = "mongodb+srv://{}:{}@projectdata.0iwnpaz.mongodb.net/?retryWrit
 client = pymongo.MongoClient(connection_url)
 database = client.get_database('ProjectData')
 
+@app.route('/')
+def home():
+    return "Backend is running"
+
 # Get list of all exercises
 @app.route('/get-all-exercises/', methods=['GET'])
 def get_exercises():
