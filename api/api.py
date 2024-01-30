@@ -5,6 +5,7 @@ import config
 import json
 import requests
 import os
+from pymongo import MongoClient
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -43,6 +44,31 @@ def get_exercises():
 # user get prescribed exercises
 
 # user upload completed exercise
+@app.route('/upload-completed-exercise/', methods=['POST'])
+def upload_exercise():
+    db_exercises = database.CompletedExercises
+    content = request.get_json()
+    
+    # Extract data from the JSON payload
+    exercise_data = {
+        '_id': str(uuid.uuid4()),  # Generate a UUID for the exercise
+        'name': content.get('name'),
+        'description': content.get('description'),
+        'sets': content.get('sets'),
+        'reps': content.get('reps'),
+        'hand': content.get('hand'),
+        'completedSets': content.get('completedSets', 0),  # Default to 0 if not provided
+        'completedReps': content.get('completedReps', 0),  # Default to 0 if not provided
+        'maxAngle': content.get('maxAngle', 0.0)  # Default to 0.0 if not provided
+    }
+
+    # Insert the exercise data into the database
+    result = db_exercises.insert_one(exercise_data)
+
+    if result.inserted_id:
+        return jsonify({'message': 'Exercise uploaded successfully'}), 200
+    else:
+        return jsonify({'message': 'Failed to upload exercise'}), 500
 
 
 if __name__ == '__main__':
