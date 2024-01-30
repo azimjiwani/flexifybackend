@@ -51,7 +51,6 @@ def upload_exercise():
     
     # Extract data from the JSON payload
     exercise_data = {
-        '_id': str(uuid.uuid4()),  # Generate a UUID for the exercise
         'name': content.get('name'),
         'description': content.get('description'),
         'sets': content.get('sets'),
