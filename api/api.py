@@ -58,7 +58,10 @@ def upload_exercise():
         'hand': content.get('hand'),
         'completedSets': content.get('completedSets', 0),  # Default to 0 if not provided
         'completedReps': content.get('completedReps', 0),  # Default to 0 if not provided
-        'maxAngle': content.get('maxAngle', 0.0)  # Default to 0.0 if not provided
+        'maxAngle': content.get('maxAngle', 0.0),  # Default to 0.0 if not provided
+        'difficulty': content.get('difficulty', 0.0),  # Default to 'easy' if not provided
+        'pain': content.get('pain', 0.0),  # Default to 0.0 if not provided
+        'notes': content.get('notes', 'N/A'),  # Default to '' if not provided
     }
 
     # Insert the exercise data into the database
