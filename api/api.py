@@ -67,6 +67,22 @@ def verify_user():
     
     return jsonify({'results': output})
 
+# Get all-patients page data
+@app.route('/get-all-patients/', methods=['GET'])
+def get_all_patients():
+    db_Users = database.Users
+    output = []
+    for user in db_Users.find():
+        data = {
+            key: user[key] if user[key] is not None else -1000
+            for key in [
+                'userName', 'firstName', 'lastName', 'email', 'dateOfBirth', 'hand', 'rehabStart', 'injuryTime',
+            ]
+        }
+        output.append(data)
+    
+    return jsonify({'results': output})
+
     # user = db_Users.find_one({'userName': content.get('userName')})
     # if user:
     #     return jsonify({'status': 'success', 'message': 'User exists'}), 200
