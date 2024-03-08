@@ -9,6 +9,7 @@ from pymongo import MongoClient
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
+CORS(app) 
 
 username  = os.environ.get('username')
 password = os.environ.get('password')
