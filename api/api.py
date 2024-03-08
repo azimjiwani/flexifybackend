@@ -57,7 +57,7 @@ def verify_user():
     output = []
     for user in db_Users.find():
         data = {
-            key: exercise[key] if excercise[key] is not None else -1000
+            key: user[key] if user[key] is not None else -1000
             for key in [
                 'userName',
             ]
