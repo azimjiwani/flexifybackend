@@ -51,7 +51,7 @@ def create_user():
         return jsonify({'message': 'Failed to create new user'}), 500
 
 # Verify entered user exists
-@app.route('/verify-username/', methods=['POST'])
+@app.route('/verify-username/', methods=['GET'])
 def verify_user():
     db_Users = database.Users
     content = request.get_json()
@@ -60,6 +60,10 @@ def verify_user():
         return jsonify({'status': 'success', 'message': 'User exists'}), 200
     else:
         return jsonify({'status': 'error', 'message': 'User does not exist'}), 404
+
+# User upload goals
+
+# Get user goals
 
 # Prescribe exercise to user
 @app.route('/prescribe-exercise/', methods=['POST'])
@@ -134,6 +138,7 @@ def upload_exercise():
 # Get app dashboard data
     # Call functions within app route to process data from database
         # Where should insight data vs collected exercise data be stored?
+
 # Get web dashboard data 
 
 # Get list of all exercises
