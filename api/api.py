@@ -146,6 +146,8 @@ def get_completed_exercises():
             ]
         }
         output.append(data)
+    
+    return jsonify({'result': output})
 
 ## Need to add calculated metrics from app completed exercise
 # User upload completed exercise
