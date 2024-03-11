@@ -5,6 +5,7 @@ import config
 import json
 import requests
 import os
+from datetime import date
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -76,22 +77,20 @@ def get_all_patients():
         data = {
             key: user[key] if user[key] is not None else -1000
             for key in [
-                'userName', 'firstName', 'lastName', 'email', 'dateOfBirth', 'hand', 'rehabStart', 'injuryTime',
+                'userName', 'firstName', 'lastName', 'email', 'dateOfBirth', 'hand', 'rehabStart', 'injuryTime'
             ]
         }
         output.append(data)
     
     return jsonify({'results': output})
 
-    # user = db_Users.find_one({'userName': content.get('userName')})
-    # if user:
-    #     return jsonify({'status': 'success', 'message': 'User exists'}), 200
-    # else:
-    #     return jsonify({'status': 'error', 'message': 'User does not exist'}), 404
+# Get patient dashboard data
 
 # User upload goals
 
 # Get user goals
+
+#
 
 # Prescribe exercise to user
 @app.route('/prescribe-exercise/', methods=['POST'])
@@ -107,6 +106,7 @@ def prescribe_exercise():
         'hand': content.get('hand'),
         'reps': content.get('reps'),
         'sets': content.get('sets'),
+        'date': content.get('date'),
     }
 
     # Insert the presribed exercise data into the database
@@ -126,13 +126,28 @@ def get_prescribed_exercises():
         data = {
             key: exercise[key] if exercise[key] is not None else -1000
             for key in [
-                'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets'
+                'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date'
             ]
         }
         output.append(data)
 
     return jsonify({'result': output})
-    
+
+# Get user completed exercises
+@app.route('/get-completed-exercises/', methods=['GET'])
+def get_completed_exercises():
+    db_completed_exercises = database.CompletedExercises
+    output = []
+    for exercise in db_completed_exercises.find():
+        data = {
+            key: exercise[key] if exercise[key] is not None else -1000
+            for key in [
+                'date', 'name', 'userName', 'maxAngle', 'difficultyRating', 'painRating', 'notes'
+            ]
+        }
+        output.append(data)
+
+## Need to add calculated metrics from app completed exercise
 # User upload completed exercise
 @app.route('/upload-completed-exercise/', methods=['POST'])
 def upload_exercise():
@@ -153,6 +168,7 @@ def upload_exercise():
         'difficultyRating': content.get('difficultyRating', 0.0),  # Default to 'easy' if not provided
         'painRating': content.get('painRating', 0.0),  # Default to 0.0 if not provided
         'notes': content.get('notes', 'N/A'),  # Default to '' if not provided
+        'date': content.get('date', date.today().strftime("%d/%m/%Y")),  # Default to today's date in D/M/Y format if not provided
     }
 
     # Insert the exercise data into the database
