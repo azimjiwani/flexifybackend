@@ -206,7 +206,7 @@ def get_app_dashboard():
         # Find and sort completed exercises for user, by date
         completed_exercises = list(db_completed_exercises.find({
             'userName': username, 
-            'name': exercisename
+            'name': exercisename,
             'date': {'$gte': month_ago.strftime('%Y/%m/%d')}
         }).sort('date', -1))
 
