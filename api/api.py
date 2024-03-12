@@ -5,7 +5,7 @@ import config
 import json
 import requests
 import os
-from datetime import date
+from datetime import datetime, date, timedelta
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -26,7 +26,7 @@ def home():
 # Create user
 @app.route('/create-user/', methods=['POST']) 
 def create_user():
-    db_Users = database.Users
+    db_users = database.Users
     content = request.get_json()
 
     # Extract data from the JSON payload
@@ -45,7 +45,7 @@ def create_user():
     }
     
      # Insert the exercise data into the database
-    result = db_Users.insert_one(user_data)
+    result = db_users.insert_one(user_data)
 
     if result.inserted_id:
         return jsonify({'message': 'New user created successfully'}), 200
@@ -55,9 +55,9 @@ def create_user():
 # Verify entered user exists
 @app.route('/verify-username/', methods=['GET'])
 def verify_user():
-    db_Users = database.Users
+    db_users = database.Users
     output = []
-    for user in db_Users.find():
+    for user in db_users.find():
         data = {
             key: user[key] if user[key] is not None else -1000
             for key in [
@@ -68,29 +68,9 @@ def verify_user():
     
     return jsonify({'results': output})
 
-# Get all-patients page data
-@app.route('/get-all-patients/', methods=['GET'])
-def get_all_patients():
-    db_Users = database.Users
-    output = []
-    for user in db_Users.find():
-        data = {
-            key: user[key] if user[key] is not None else -1000
-            for key in [
-                'userName', 'firstName', 'lastName', 'email', 'dateOfBirth', 'hand', 'rehabStart', 'injuryTime'
-            ]
-        }
-        output.append(data)
-    
-    return jsonify({'results': output})
-
-# Get patient dashboard data
-
 # User upload goals
 
 # Get user goals
-
-#
 
 # Prescribe exercise to user
 @app.route('/prescribe-exercise/', methods=['POST'])
@@ -120,8 +100,18 @@ def prescribe_exercise():
 # User get prescribed exercises
 @app.route('/get-prescribed-exercises/', methods=['GET'])
 def get_prescribed_exercises():
+    username = request.args.get('userName')
+    date = request.args.get('date')
     db_presribed_exercises = database.PrescribedExercises
     output = []
+
+    if username and date:
+        exercises = db_presribed_exercises.find({'userName': username, 'date': date})
+    elif username:
+        exercises = db_presribed_exercises.find({'userName': username})
+    else:
+        return jsonify({'message': 'Username and date are required'}), 400
+
     for exercise in db_presribed_exercises.find():
         data = {
             key: exercise[key] if exercise[key] is not None else -1000
@@ -133,12 +123,22 @@ def get_prescribed_exercises():
 
     return jsonify({'result': output})
 
-# Get user completed exercises
+# Get completed exercises
 @app.route('/get-completed-exercises/', methods=['GET'])
 def get_completed_exercises():
+    username = request.args.get('userName')
+    date = request.args.get('date')
     db_completed_exercises = database.CompletedExercises
     output = []
-    for exercise in db_completed_exercises.find():
+
+    if username and date:
+        exercises = db_completed_exercises.find({'userName': username, 'date': date})
+    elif username:
+        exercises = db_completed_exercises.find({'userName': username})
+    else:
+        return jsonify({'message': 'Username and date are required'}), 400
+
+    for exercise in exercises:
         data = {
             key: exercise[key] if exercise[key] is not None else -1000
             for key in [
@@ -149,7 +149,6 @@ def get_completed_exercises():
     
     return jsonify({'result': output})
 
-## Need to add calculated metrics from app completed exercise
 # User upload completed exercise
 @app.route('/upload-completed-exercise/', methods=['POST'])
 def upload_exercise():
@@ -184,11 +183,105 @@ def upload_exercise():
 # Get app dashboard data
     # Call functions within app route to process data from database
         # Where should insight data vs collected exercise data be stored?
+@app.route('/get-app-dashboard/', methods=['GET'])
+def get_app_dashboard():
+    username = request.args.get('userName')
+    exercisename = request.args.get('name')
+    db_users = database.users
+    db_completed_exercises = database.CompletedExercises
+    ang_diff = {}
+    output = []
 
-# Get web dashboard data 
+    # Verify if username and/or exercisename is provided
+    if username and exercisename:
+        users = db_users.find({'userName': username})
+        db_completed_exercises = database.CompletedExercises.find({'userName': username})
+        total_completed_exercises = db_completed_exercises.count_documents({'userName' : username})
+        total_prescribed_exercises = database.PrescribedExercises.count_documents({'userName' : username})
+        
+        # Time periods for insights
+        week_ago = datetime.now() - timedelta(days=7)
+        month_ago = datetime.now() - timedelta(days=30)
+        
+        # Find and sort completed exercises for user, by date
+        completed_exercises = list(db_completed_exercises.find({
+            'userName': username, 
+            'name': exercisename
+            'date': {'$gte': month_ago.strftime('%Y/%m/%d')}
+        }).sort('date', -1))
+
+        # Calculate the difference in max angle for each period
+        periods = {
+            'lastExercise': completed_exercises[:2],
+            'last7Days': [exercise for exercise in completed_exercises if exercise['date'] >= week_ago.strftime('%Y-%m-%d')][:2],
+            'last30Days': completed_exercises[:2]
+        }
+        
+        for period, exercises in periods.itemsI():
+            if len(exercise) >= 2:
+                last_exercise = exercises[0]
+                second_last_exercise = exercise[1]
+                angle_difference = last_exercise['maxAngle'] - second_last_exercise['maxAngle']
+                ang_diff['angleDifference'] = angle_difference
+
+    elif username:
+        users = db_users.find({'userName': username})
+        db_completed_exercises = database.CompletedExercises.find({'userName': username})
+        db_prescribed_exercises = database.PrescribedExercises.find({'userName': username})
+        total_completed_exercises = db_completed_exercises.count_documents({'userName' : username})
+        total_prescribed_exercises = database.PrescribedExercises.count_documents({'userName' : username})
+    else:
+        return jsonify({'message': 'Username is required'}), 400
+    
+    for user in users:
+        userData = {
+            key: user[key] if user[key] is not None else -1000
+            for key in [
+                'userName', 'rehabStart'
+            ]
+        }
+        # Calculate elapsed time since rehab start
+        rehab_start = datetime.strptime(userData['rehabStart'], '%Y/%m/%d')
+        time_progress = datetime.now() - rehab_start
+        userData['timeProgress'] = time_progress.days // 7
+    
+    for exercise in db_completed_exercises:
+        exerciseData = {
+            key: exercise[key] if exercise[key] is not None else -1000
+            for key in [
+                'maxAngle', 'name'
+            ]
+        }
+        exerciseData['totalCompletedExercises'] = total_completed_exercises
+        exerciseData['totalPrescribedExercises'] = total_prescribed_exercises
+
+        output.append(userData)
+        output.append(exerciseData)
+        output.append(ang_diff)
+    
+    return jsonify({'results': output})
+
+# Get web patient dashboard data 
+
+# Get all-patients page data
+@app.route('/get-all-patients/', methods=['GET'])
+def get_all_patients():
+    db_users = database.Users
+    output = []
+
+    for user in db_users.find():
+        data = {
+            key: user[key] if user[key] is not None else -1000
+            for key in [
+                'userName', 'firstName', 'lastName', 'email', 'dateOfBirth', 'hand', 'rehabStart', 'injuryTime'
+            ]
+        }
+        output.append(data)
+    
+    return jsonify({'results': output})
 
 # Get list of all exercises
-@app.route('/get-all-exercises/', methods=['GET'])
+@app.route('/get-all-exercises/', methods=['GET'], )
 def get_exercises():
     db_exercises = database.ValidExercises
     output = []
