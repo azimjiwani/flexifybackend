@@ -68,9 +68,48 @@ def verify_user():
             return jsonify({'message': 'User does not exist'}), 404
 
 # User upload goals
+@app.route('/upload-goals/', methods=['POST'])
+def upload_goals():
+    db_users = database.Users
+    content = request.get_json()
+    
+    # Extract data from the JSON payload
+    user_data = {
+        'userName': content.get('userName'),
+        'goal1': content.get('goal1'),
+        'goal2': content.get('goal2'),
+        'goal3': content.get('goal3'),
+    }
+    
+     # Insert the exercise data into the database
+    result = db_users.insert_one(user_data)
 
+    if result.inserted_id:
+        return jsonify({'message': 'New goal(s) added successfully'}), 200
+    else:
+        return jsonify({'message': 'Failed to update new goal(s)'}), 500
 
 # Get user goals
+@app.route('/get-goals/', methods=['GET'])
+def get_goals():
+    username = request.args.get('userName')
+    db_users = database.Users
+    output = []
+
+    if username is None:
+        return jsonify({'message': 'Username is required'}), 400
+    else:
+        user = db_users.find_one({'userName': username})
+        if user is not None:
+            for goal in user:
+                data = {
+                    key: goal[key] if goal[key] is not None else -1000
+                    for key in [
+                        'goal1', 'goal2', 'goal3'
+                    ]
+                }
+                output.append(data)
+            return jsonify({'result': output})
 
 # Prescribe exercise to user
 @app.route('/prescribe-exercise/', methods=['POST'])
