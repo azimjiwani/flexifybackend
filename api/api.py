@@ -56,17 +56,17 @@ def create_user():
 @app.route('/verify-username/', methods=['GET'])
 def verify_user():
     db_users = database.Users
-    output = []
-    for user in db_users.find():
-        data = {
-            key: user[key] if user[key] is not None else -1000
-            for key in [
-                'userName',
-            ]
-        }
-        output.append(data)
+    username = request.args.get('userName')
+
+    if username is None:
+        return jsonify({'message': 'Username is required'}), 400
     
-    return jsonify({'results': output})
+    # Find the user with the passed username
+    user = db_users.find({'userName': username})
+    if user is not None:
+        return jsonify({'message': 'User exists'}), 200
+    else: 
+        return jsonify({'message': 'User does not exist'}), 404
 
 # User upload goals
 
