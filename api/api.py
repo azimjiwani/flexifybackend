@@ -61,7 +61,7 @@ def verify_user():
     if username is None:
         return jsonify({'message': 'Username is required'}), 400
     else:
-        user = db_users.find({'userName': username})
+        user = db_users.find_one({'userName': username})
         if user is not None:
             return jsonify({'message': 'User exists'}), 200
         else: 
