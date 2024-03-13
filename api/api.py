@@ -60,15 +60,15 @@ def verify_user():
 
     if username is None:
         return jsonify({'message': 'Username is required'}), 400
-    
-    # Find the user with the passed username
-    user = db_users.find({'userName': username})
-    if user is not None:
-        return jsonify({'message': 'User exists'}), 200
-    else: 
-        return jsonify({'message': 'User does not exist'}), 404
+    else:
+        user = db_users.find({'userName': username})
+        if user is not None:
+            return jsonify({'message': 'User exists'}), 200
+        else: 
+            return jsonify({'message': 'User does not exist'}), 404
 
 # User upload goals
+
 
 # Get user goals
 
