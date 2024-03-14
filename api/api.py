@@ -65,9 +65,9 @@ def verify_user():
     else:
         user = db_users.find_one({'userName': username})
         if user is not None:
-            return True, 200
+            return 'true', 200
         else: 
-            return False, 404
+            return 'false', 404
         
 # # Get ObjectID
 # @app.route('/get-objectid/', methods=['GET'])
