@@ -170,7 +170,6 @@ def get_prescribed_exercises():
     output = []
 
     if username and date:
-        date = datetime.strptime(date, '%Y-%m-%d')
         exercises = db_presribed_exercises.find({'userName': username, 'date': date})
         for exercise in exercises:
             data = {
