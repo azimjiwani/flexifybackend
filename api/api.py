@@ -80,6 +80,14 @@ def get_objectid():
     else:
         objectid = db_users.find_one({'userName': username})
         if objectid is not None:
+            for objectids in objectid:
+                data = {
+                    key: objectid[key] if objectid[key] is not None else -1000
+                    for key in [
+                        '_id'
+                    ]
+                }
+                output.append(data)
             return jsonify({'id': dumps(objectid['_id'])}), 200
         else:
             return jsonify({'message': 'Exercise does not exist'}), 404
