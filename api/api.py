@@ -201,7 +201,20 @@ def get_completed_exercises():
         data = {
             key: exercise[key] if exercise[key] is not None else -1000
             for key in [
-                'date', 'name', 'userName', 'maxAngle', 'difficultyRating', 'painRating', 'notes'
+                'userName',
+                'exerciseName', 
+                'hand', 
+                'description', 
+                'reps', 
+                'sets', 
+                'completedReps', 
+                'completedSets', 
+                'maxAngle', 
+                'difficultyRating', 
+                'painRating', 
+                'notes', 
+                'date',
+                'isCompleted'
             ]
         }
         output.append(data)
@@ -211,7 +224,7 @@ def get_completed_exercises():
 # User upload completed exercise
 @app.route('/upload-completed-exercise/', methods=['POST'])
 def upload_exercise():
-    db_exercises = database.CompletedExercises
+    db_exercises = database.PrescribedExercises
     content = request.get_json()
     
     # Extract data from the JSON payload
@@ -228,7 +241,8 @@ def upload_exercise():
         'difficultyRating': content.get('difficultyRating', 0.0),  # Default to 'easy' if not provided
         'painRating': content.get('painRating', 0.0),  # Default to 0.0 if not provided
         'notes': content.get('notes', 'N/A'),  # Default to '' if not provided
-        'date': content.get('date', date.today().strftime("%d/%m/%Y")),  # Default to today's date in D/M/Y format if not provided
+        'date': content.get('date', date.today().strftime("%Y/%m/%d")),  # Default to today's date in Y/M/D format if not provided
+        'isCompleted': content.get('isCompleted', True)  # Change to True when uploaded
     }
 
     # Insert the exercise data into the database
