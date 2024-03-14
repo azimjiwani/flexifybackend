@@ -168,21 +168,29 @@ def get_prescribed_exercises():
     if username and date:
         date = datetime.strptime(date, '%Y-%m-%d')
         exercises = db_presribed_exercises.find({'userName': username, 'date': date})
+        for exercise in exercises:
+            data = {
+                key: exercise[key] if key in exercise and exercise[key] is not None else -1000
+                for key in [
+                    'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 
+                ]
+            }
+            output.append(data)
+        return jsonify({'result': output})
+    
     elif username:
         exercises = db_presribed_exercises.find({'userName': username})
+        for exercise in exercises:
+            data = {
+                key: exercise[key] if key in exercise and exercise[key] is not None else -1000
+                for key in [
+                    'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 
+                ]
+            }
+            output.append(data)
+        return jsonify({'result': output})
     else:
         return jsonify({'message': 'Username and date are required'}), 400
-
-    for exercise in db_presribed_exercises.find():
-        data = {
-            key: exercise[key] if key in exercise and exercise[key] is not None else -1000
-            for key in [
-                'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 
-            ]
-        }
-        output.append(data)
-
-    return jsonify({'result': output})
 
 # Get completed exercises
 @app.route('/get-completed-exercises/', methods=['GET'])
