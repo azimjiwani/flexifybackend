@@ -64,28 +64,28 @@ def verify_user():
     else:
         user = db_users.find_one({'userName': username})
         if user is not None:
-            return jsonify({'exists': True}), 200
+            return 'true', 200
         else: 
-            return jsonify({'exists': False}), 404
+            return 'false', 404
         
-# Get ObjectID
-@app.route('/get-objectid/', methods=['GET'])
-def get_objectid():
-    db_users = database.Users
-    username = request.args.get('userName')
-    output = []
+# # Get ObjectID
+# @app.route('/get-objectid/', methods=['GET'])
+# def get_objectid():
+#     db_users = database.Users
+#     username = request.args.get('userName')
+#     output = []
 
-    if username is None:
-        return jsonify({'message': 'Username is required'}), 400
-    else:
-        objectid = db_users.find({"_id" : ObjectId("4ecc05e55dd98a436ddcc47c")})
-        if objectid is not None:
-            return jsonify({'exists': True}), 200
-        else: 
-            return jsonify({'exists': False}), 404
+#     if username is None:
+#         return jsonify({'message': 'Username is required'}), 400
+#     else:
+#         objectid = db_users.find({"_id" : ObjectId("4ecc05e55dd98a436ddcc47c")})
+#         if objectid is not None:
+#             return jsonify({'exists': True}), 200
+#         else: 
+#             return jsonify({'exists': False}), 404
 
     
-       #  db_users.find({"_id" : ObjectId("4ecc05e55dd98a436ddcc47c")})
+#        #  db_users.find({"_id" : ObjectId("4ecc05e55dd98a436ddcc47c")})
 
 # User upload goals
 @app.route('/upload-goals/', methods=['POST'])
