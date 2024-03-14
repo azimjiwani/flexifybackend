@@ -175,7 +175,7 @@ def get_prescribed_exercises():
 
     for exercise in db_presribed_exercises.find():
         data = {
-            key: exercise[key] if exercise[key] is not None else -1000
+            key: exercise[key] if key in exercise and exercise[key] is not None else -1000
             for key in [
                 'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 
             ]
