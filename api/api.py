@@ -7,6 +7,7 @@ import requests
 import os
 from datetime import datetime, date, timedelta
 from pymongo import MongoClient
+from bson.json_util import dumps
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -68,22 +69,22 @@ def verify_user():
             return jsonify({'exists': False}), 404
         
 # Get ObjectID
-# @app.route('/get-objectid/', methods=['GET'])
-# def get_objectid():
-#     db_users = database.Users
-#     username = request.args.get('userName')
-#     output = []
+@app.route('/get-objectid/', methods=['GET'])
+def get_objectid():
+    db_users = database.Users
+    username = request.args.get('userName')
+    output = []
 
-#     db.Users.find({"_id" : ObjectId("4ecc05e55dd98a436ddcc47c")})
-#         data = {
-#             key: objectid[key] if objectid[key] is not None else -1000
-#             for key in [
-#                 '_id'
-#             ]
-#         }
-#         output.append(data)
-
-#     return jsonify({'result': output})
+    if username is None:
+        return jsonify({'message': 'Username is required'}), 400
+    else:
+        objectid = db_users.find_one({'userName': username})
+        if objectid is not None:
+            return jsonify({'id': dumps(objectid['_id'])}), 200
+        else:
+            return jsonify({'message': 'Exercise does not exist'}), 404
+    
+       #  db_users.find({"_id" : ObjectId("4ecc05e55dd98a436ddcc47c")})
 
 # User upload goals
 @app.route('/upload-goals/', methods=['POST'])
@@ -175,7 +176,7 @@ def get_prescribed_exercises():
         data = {
             key: exercise[key] if exercise[key] is not None else -1000
             for key in [
-                'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted'
+                'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 
             ]
         }
         output.append(data)
