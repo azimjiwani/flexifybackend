@@ -119,7 +119,7 @@ def get_goals():
     if username is None:
         return jsonify({'message': 'Username is required'}), 400
     else:
-        goal = db_goals.find_one({'userName': username})
+        goal = db_goals.find({'userName': username})
         if goal is not None:
             for goals in goal:
                 data = {
