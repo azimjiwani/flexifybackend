@@ -66,6 +66,24 @@ def verify_user():
             return jsonify({'message': 'User exists'}), 200
         else: 
             return jsonify({'message': 'User does not exist'}), 404
+        
+# Get ObjectID
+@app.route('/get-objectid/', methods=['GET'])
+def get_objectid():
+    db_users = database.Users
+    username = request.args.get('userName')
+    output = []
+
+    for objectid in db_users.find():
+        data = {
+            key: objectid[key] if objectid[key] is not None else -1000
+            for key in [
+                '_id'
+            ]
+        }
+        output.append(data)
+
+    return jsonify({'result': output})
 
 # User upload goals
 @app.route('/upload-goals/', methods=['POST'])
@@ -126,6 +144,7 @@ def prescribe_exercise():
         'reps': content.get('reps'),
         'sets': content.get('sets'),
         'date': content.get('date'),
+        'isCompleted' : content.get('isCompleted', False)
     }
 
     # Insert the presribed exercise data into the database
@@ -156,7 +175,7 @@ def get_prescribed_exercises():
         data = {
             key: exercise[key] if exercise[key] is not None else -1000
             for key in [
-                'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date'
+                'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted'
             ]
         }
         output.append(data)
