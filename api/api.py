@@ -164,7 +164,7 @@ def get_prescribed_exercises():
     output = []
 
     if username and date:
-        date = datetime.strptime(date, '%Y/%m/%d')
+        date = datetime.strptime(date, '%Y-%m-%d')
         exercises = db_presribed_exercises.find({'userName': username, 'date': date})
     elif username:
         exercises = db_presribed_exercises.find({'userName': username})
@@ -229,7 +229,7 @@ def upload_exercise():
     
     # Extract data from the JSON payload
     exercise_data = {
-        'name': content.get('name'),
+        'exerciseName': content.get('name'),
         'userName': content.get('userName'),
         'description': content.get('description'),
         'sets': content.get('sets'),
