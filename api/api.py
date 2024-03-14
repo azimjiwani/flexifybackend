@@ -63,27 +63,27 @@ def verify_user():
     else:
         user = db_users.find_one({'userName': username})
         if user is not None:
-            return jsonify({'message': 'User exists'}), 200
+            return jsonify({'exists': True}), 200
         else: 
-            return jsonify({'message': 'User does not exist'}), 404
+            return jsonify({'exists': False}), 404
         
 # Get ObjectID
-@app.route('/get-objectid/', methods=['GET'])
-def get_objectid():
-    db_users = database.Users
-    username = request.args.get('userName')
-    output = []
+# @app.route('/get-objectid/', methods=['GET'])
+# def get_objectid():
+#     db_users = database.Users
+#     username = request.args.get('userName')
+#     output = []
 
-    for objectid in db_users.find():
-        data = {
-            key: objectid[key] if objectid[key] is not None else -1000
-            for key in [
-                '_id'
-            ]
-        }
-        output.append(data)
+#     db.Users.find({"_id" : ObjectId("4ecc05e55dd98a436ddcc47c")})
+#         data = {
+#             key: objectid[key] if objectid[key] is not None else -1000
+#             for key in [
+#                 '_id'
+#             ]
+#         }
+#         output.append(data)
 
-    return jsonify({'result': output})
+#     return jsonify({'result': output})
 
 # User upload goals
 @app.route('/upload-goals/', methods=['POST'])
@@ -187,7 +187,7 @@ def get_prescribed_exercises():
 def get_completed_exercises():
     username = request.args.get('userName')
     date = request.args.get('date')
-    db_completed_exercises = database.CompletedExercises
+    db_completed_exercises = database.PrescribedExercises
     output = []
 
     if username and date:
