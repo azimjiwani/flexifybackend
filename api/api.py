@@ -70,19 +70,19 @@ def verify_user():
 # User upload goals
 @app.route('/upload-goals/', methods=['POST'])
 def upload_goals():
-    db_users = database.Users
+    db_goals = database.Goals
     content = request.get_json()
     
     # Extract data from the JSON payload
-    user_data = {
+    goal_data = {
         'userName': content.get('userName'),
         'goal1': content.get('goal1'),
         'goal2': content.get('goal2'),
         'goal3': content.get('goal3'),
     }
     
-     # Insert the exercise data into the database
-    result = db_users.insert_one(user_data)
+    # Insert the exercise data into the database
+    result = db_goals.insert_one(goal_data)
 
     if result.inserted_id:
         return jsonify({'message': 'New goal(s) added successfully'}), 200
@@ -93,17 +93,17 @@ def upload_goals():
 @app.route('/get-goals/', methods=['GET'])
 def get_goals():
     username = request.args.get('userName')
-    db_users = database.Users
+    db_goals = database.Goals
     output = []
 
     if username is None:
         return jsonify({'message': 'Username is required'}), 400
     else:
-        user = db_users.find_one({'userName': username})
-        if user is not None:
-            for goal in user:
+        goal = db_goals.find_one({'userName': username})
+        if goal is not None:
+            for goals in goal:
                 data = {
-                    key: goal[key] if goal[key] is not None else -1000
+                    key: goals[key] if goals[key] is not None else -1000
                     for key in [
                         'goal1', 'goal2', 'goal3'
                     ]
@@ -145,6 +145,7 @@ def get_prescribed_exercises():
     output = []
 
     if username and date:
+        date = datetime.strptime(date, '%Y/%m/%d')
         exercises = db_presribed_exercises.find({'userName': username, 'date': date})
     elif username:
         exercises = db_presribed_exercises.find({'userName': username})
@@ -301,6 +302,10 @@ def get_app_dashboard():
     return jsonify({'results': output})
 
 # Get web patient dashboard data 
+
+# Patient plan
+
+# Line graphs
 
 # Get all-patients page data
 @app.route('/get-all-patients/', methods=['GET'])
