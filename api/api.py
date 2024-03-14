@@ -178,7 +178,7 @@ def get_prescribed_exercises():
             data = {
                 key: exercise[key] if key in exercise and exercise[key] is not None else -1000
                 for key in [
-                    'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 
+                    'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 'uniqueId'
                 ]
             }
             output.append(data)
@@ -190,7 +190,7 @@ def get_prescribed_exercises():
             data = {
                 key: exercise[key] if key in exercise and exercise[key] is not None else -1000
                 for key in [
-                    'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 
+                    'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 'uniqueId'
                 ]
             }
             output.append(data)
@@ -231,6 +231,7 @@ def get_completed_exercises():
                 'notes', 
                 'date',
                 'isCompleted'
+                'uniqueId'
             ]
         }
         output.append(data)
