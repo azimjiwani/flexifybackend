@@ -100,14 +100,18 @@ def upload_goals():
         'goal2': content.get('goal2'),
         'goal3': content.get('goal3'),
     }
-    
-    # Insert the exercise data into the database
-    result = db_goals.insert_one(goal_data)
 
-    if result.inserted_id:
-        return jsonify({'message': 'New goal(s) added successfully'}), 200
+# Update the goal data in the database, or insert it if it doesn't exist
+    result = db_goals.update_one(
+        {'userName': goal_data['userName']},  # filter
+        {'$set': goal_data},  # update
+        upsert=True  # create a new document if no document matches the filter
+    )
+
+    if result.upserted_id or result.modified_count > 0:
+        return jsonify({'message': 'Goal(s) updated successfully'}), 200
     else:
-        return jsonify({'message': 'Failed to update new goal(s)'}), 500
+        return jsonify({'message': 'Failed to update goal(s)'}), 500
 
 # Get user goals
 @app.route('/get-goals/', methods=['GET'])
@@ -347,8 +351,10 @@ def get_app_dashboard():
 # Get web patient dashboard data 
 
 # Patient plan
+# prioritize
 
 # Line graphs
+# prioritize
 
 # Get all-patients page data
 @app.route('/get-all-patients/', methods=['GET'])
