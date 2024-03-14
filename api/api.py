@@ -78,19 +78,12 @@ def get_objectid():
     if username is None:
         return jsonify({'message': 'Username is required'}), 400
     else:
-        objectid = db_users.find_one({'userName': username})
+        objectid = db_users.find({"_id" : ObjectId("4ecc05e55dd98a436ddcc47c")})
         if objectid is not None:
-            for objectids in objectid:
-                data = {
-                    key: objectid[key] if objectid[key] is not None else -1000
-                    for key in [
-                        '_id'
-                    ]
-                }
-                output.append(data)
-            return jsonify({'id': dumps(objectid['_id'])}), 200
-        else:
-            return jsonify({'message': 'Exercise does not exist'}), 404
+            return jsonify({'exists': True}), 200
+        else: 
+            return jsonify({'exists': False}), 404
+
     
        #  db_users.find({"_id" : ObjectId("4ecc05e55dd98a436ddcc47c")})
 
