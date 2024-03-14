@@ -6,4 +6,3 @@ pymongo
 Flask-RESTful
 Flask-Cors
 config
-uuid
