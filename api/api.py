@@ -8,7 +8,7 @@ import os
 from datetime import datetime, date, timedelta
 from pymongo import MongoClient
 from bson.json_util import dumps
-import nanoid from nanoid
+import uuid
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -141,7 +141,7 @@ def get_goals():
 def prescribe_exercise():
     db_prescribed_exercises = database.PrescribedExercises
     content = request.get_json()
-    uniqueId = str(nanoid(10))
+    uniqueId = str(uuid.uuid4())
 
     # Extract data from the JSON payload
     prescribed_exercise_data = {
