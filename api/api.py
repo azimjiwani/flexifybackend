@@ -242,28 +242,52 @@ def get_completed_exercises():
 @app.route('/upload-completed-exercise/', methods=['POST'])
 def upload_exercise():
     db_exercises = database.PrescribedExercises
+    uniqueId = request.args.get('uniqueId')
     content = request.get_json()
-    
-    # Extract data from the JSON payload
-    exercise_data = {
-        'exerciseName': content.get('name'),
-        'userName': content.get('userName'),
-        'description': content.get('description'),
-        'sets': content.get('sets'),
-        'reps': content.get('reps'),
-        'hand': content.get('hand'),
-        'completedSets': content.get('completedSets', 0),  # Default to 0 if not provided
-        'completedReps': content.get('completedReps', 0),  # Default to 0 if not provided
-        'maxAngle': content.get('maxAngle', 0.0),  # Default to 0.0 if not provided
-        'difficultyRating': content.get('difficultyRating', 0.0),  # Default to 'easy' if not provided
-        'painRating': content.get('painRating', 0.0),  # Default to 0.0 if not provided
-        'notes': content.get('notes', 'N/A'),  # Default to '' if not provided
-        'date': content.get('date', date.today().strftime("%Y/%m/%d")),  # Default to today's date in Y/M/D format if not provided
-        'isCompleted': content.get('isCompleted', True)  # Change to True when uploaded
-    }
 
-    # Insert the exercise data into the database
-    result = db_exercises.insert_one(exercise_data)
+    myQuery = { "uniqueId": content['uniqueId']}
+    newValues = {"$set":
+                 {"isCompleted": True,
+                  "completedReps": content['completedReps'],
+                  "completedSets": content['completedSets'],
+                  "maxAngle": content['maxAngle'],
+                  "difficultyRating": content['difficultyRating'],
+                  "painRating": content['painRating'],
+                  "notes": content['notes']}
+                 }
+    
+    result = db_exercises.update_one(myQuery,newValues)
+
+    if result.matched_count > 0:
+        if result.modified_count > 0:
+            return jsonify({'message': 'Exercise updated successfully'}), 200
+        else:
+            return jsonify({'message': 'Exercise was already up-to-date'}), 200
+    else:
+        return jsonify({'message': 'No exercise matched the given query'}), 404
+    
+    # # Extract data from the JSON payload
+    # exercise_data = {
+    #     'exerciseName': content.get('name'),
+    #     'userName': content.get('userName'),
+    #     'description': content.get('description'),
+    #     'sets': content.get('sets'),
+    #     'reps': content.get('reps'),
+    #     'hand': content.get('hand'),
+    #     'completedSets': content.get('completedSets', 0),  # Default to 0 if not provided
+    #     'completedReps': content.get('completedReps', 0),  # Default to 0 if not provided
+    #     'maxAngle': content.get('maxAngle', 0.0),  # Default to 0.0 if not provided
+    #     'difficultyRating': content.get('difficultyRating', 0.0),  # Default to 'easy' if not provided
+    #     'painRating': content.get('painRating', 0.0),  # Default to 0.0 if not provided
+    #     'notes': content.get('notes', 'N/A'),  # Default to '' if not provided
+    #     'date': content.get('date', date.today().strftime("%Y/%m/%d")),  # Default to today's date in Y/M/D format if not provided
+    #     'isCompleted': content.get('isCompleted', True)  # Change to True when uploaded
+    # }
+
+    # # Insert the exercise data into the database
+    # result = db_exercises.insert_one(exercise_data)
+
+
 
     if result.inserted_id:
         return jsonify({'message': 'Exercise uploaded successfully'}), 200
