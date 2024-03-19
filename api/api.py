@@ -373,7 +373,7 @@ def get_dashboard_data():
 
     data = {key: user[key] if key in user and user[key] is not None else -1000
                 for key in [
-                    'currentWeek', 'totalWeeks',
+                    'currentWeek', 'injuryTime',
                     'exercisesCompleted', 'totalExercises',
                     'maxWristFlexion', 'targetWristFlexion',
                     'maxWristExtension', 'targetWristExtension',
