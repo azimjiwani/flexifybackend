@@ -9,6 +9,8 @@ from datetime import datetime, date, timedelta
 from pymongo import MongoClient
 from bson.json_util import dumps
 import uuid
+from datetime import datetime, timedelta
+
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -43,7 +45,18 @@ def create_user():
         'injury': content.get('injury'),
         'rehabStart': content.get('rehabStart'),
         'injuryTime': content.get('injuryTime'),
-        'targets': content.get('targets'),
+        'targetWristFlexion': content.get('targetWristFlexion'),
+        'targetWristExtension': content.get('targetWristExtension'),
+        'targetUlnarDeviation': content.get('targetUlnarDeviation'),
+        'targetRadialDeviation': content.get('targetRadialDeviation'),
+        'currentWeek': 0,
+        'totalWeeks': 0,
+        'exercisesCompleted': 0,
+        'totalExercises': 0,
+        'maxWristFlexion': 0,
+        'maxWristExtension': 0,
+        'maxUlnarDeviation': 0,
+        'maxRadialDeviation': 0
     }
     
      # Insert the exercise data into the database
@@ -242,10 +255,11 @@ def get_completed_exercises():
 @app.route('/upload-completed-exercise/', methods=['POST'])
 def upload_exercise():
     db_exercises = database.PrescribedExercises
+    username = request.args.get('userName')
     uniqueId = request.args.get('uniqueId')
     content = request.get_json()
 
-    myQuery = { "uniqueId": content['uniqueId']}
+    myQuery = { "uniqueId": uniqueId}
     newValues = {"$set":
                  {"isCompleted": True,
                   "completedReps": content['completedReps'],
@@ -258,6 +272,52 @@ def upload_exercise():
     
     result = db_exercises.update_one(myQuery,newValues)
 
+    # get user from DB
+    db_users = database.Users
+    user = db_users.find_one({'userName'})
+    userWeek = user['currentWeek']
+    userExercisesCompleted = user['exercisesCompleted']
+    userMaxWristFlexion = user['maxWristFlexion']
+    userMaxWristExtension = user['maxWristExtension']
+    userMaxUlnarDeviation = user['maxUlnarDeviation']
+    userMaxRadialDeviation = user['maxRadialDeviation']
+
+    # compute number of weeks between userWeek and current date
+    userWeek = datetime.strptime(user['rehabStart'], '%Y-%m-%d')
+    currentDate = datetime.now()
+    diff = currentDate - userWeek
+    currentWeek = diff.days // 7
+    if currentWeek < 1:
+        currentWeek = 1
+
+    # update user week
+    userQuery = {"userName": username}
+    userNewValues = {"$set": 
+                     {
+                         "currentWeek": currentWeek,
+                         "exercisesCompleted": userExercisesCompleted + 1
+                      }
+                     }
+    
+    if content['exerciseName'] == "Wrist Flexion":
+        userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
+    
+    elif content['exerciseName'] == "Wrist Extension":
+        userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
+    
+    elif content['exerciseName'] == "Ulnar Deviation":
+        userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
+
+    elif content['exerciseName'] == "Radial Deviation":
+        userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
+    
+    updateResult = db_users.update_one(userQuery, userNewValues)
+
+    if result.modified_count > 0 and updateResult.modified_count > 0:
+        return jsonify({'message': 'Exercise uploaded and updated successfully'}), 200
+    else:
+        return jsonify({'message': 'Failed to upload and update exercise'}), 500
+    
     if result.matched_count > 0:
         if result.modified_count > 0:
             return jsonify({'message': 'Exercise updated successfully'}), 200
@@ -293,6 +353,31 @@ def upload_exercise():
         return jsonify({'message': 'Exercise uploaded successfully'}), 200
     else:
         return jsonify({'message': 'Failed to upload exercise'}), 500
+    
+
+# get user info for dashboard
+@app.route('/get-dashboard-data-app/', methods=['GET'])
+def get_dashboard_data():
+    username = request.args.get('userName')
+    db_users = database.Users
+
+    if username is None:
+        return jsonify({'message': 'Username is required'}), 400
+    
+    user = db_users.find_one({'userName': username})
+    output = []
+
+    data = {key: user[key] if key in user and user[key] is not None else -1000
+                for key in [
+                    'currentWeek', 'exercisesCompleted', 'totalExercises',
+                    'maxWristFlexion', 'targetWristFlexion',
+                    'maxWristExtension', 'targetWristExtension',
+                    'maxUlnarDeviation', 'targetUlnarDeviation',
+                    'maxRadialDeviation', 'targetRadialDeviation',
+                ]
+            }
+    output.append(data)
+    return jsonify({'result': output})
 
 # Get app dashboard data
     # Call functions within app route to process data from database
