@@ -362,7 +362,7 @@ def upload_exercise():
 
 # Get user info for mobile dashboard
 @app.route('/get-profile-data-app/', methods=['GET'])
-def get_dashboard_data():
+def get_profile_data():
     username = request.args.get('userName')
     db_users = database.Users
 
@@ -377,7 +377,7 @@ def get_dashboard_data():
                     'userName',
                     'hand', 'injury',
                     'rehabStart',
-                    'goals'
+                    'goals',
                 ]
             }
     return jsonify({'result': data})
