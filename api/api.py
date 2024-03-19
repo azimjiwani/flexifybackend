@@ -361,6 +361,29 @@ def upload_exercise():
     
 
 # Get user info for mobile dashboard
+@app.route('/get-profile-data-app/', methods=['GET'])
+def get_dashboard_data():
+    username = request.args.get('userName')
+    db_users = database.Users
+
+    if username is None:
+        return jsonify({'message': 'Username is required'}), 400
+    
+    user = db_users.find_one({'userName': username})
+
+    data = {key: user[key] if key in user and user[key] is not None else -1000
+                for key in [
+                    'firstName', 'lastName',
+                    'userName',
+                    'hand', 'injury',
+                    'rehabStart',
+                    'goals'
+                ]
+            }
+    return jsonify({'result': data})
+    
+
+# Get user info for mobile dashboard
 @app.route('/get-dashboard-data-app/', methods=['GET'])
 def get_dashboard_data():
     username = request.args.get('userName')
