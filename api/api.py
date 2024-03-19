@@ -370,7 +370,6 @@ def get_dashboard_data():
         return jsonify({'message': 'Username is required'}), 400
     
     user = db_users.find_one({'userName': username})
-    output = []
 
     data = {key: user[key] if key in user and user[key] is not None else -1000
                 for key in [
@@ -382,8 +381,7 @@ def get_dashboard_data():
                     'maxRadialDeviation', 'targetRadialDeviation',
                 ]
             }
-    output.append(data)
-    return jsonify({'result': output})
+    return jsonify({'result': data})
 
 # Get app dashboard data
 #     # Call functions within app route to process data from database
