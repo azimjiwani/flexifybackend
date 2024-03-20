@@ -619,7 +619,6 @@ def get_dashboard_data():
 def get_web_dashboard_data_():
     username = request.args.get('userName')
     db_users = database.Users
-    db_users = database.PrescribedExercises
 
     if username is None:
         return jsonify({'message': 'Username is required'}), 400
