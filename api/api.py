@@ -623,10 +623,12 @@ def get_web_dashboard_data_():
 
     if username is None:
         return jsonify({'message': 'Username is required'}), 400
-    
 
     user = db_users.find_one({'userName': username})
-    # add way to see last month and last week 
+
+    if user is None:
+        return jsonify({'message': 'User not found'}), 404
+
     data = {key: user[key] if key in user and user[key] is not None else -1000
                 for key in [
                     'firstName', 'lastName',
