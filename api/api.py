@@ -203,6 +203,90 @@ def get_patient_plan():
             return jsonify({'result': output})         
 
 # Populate prescribed exercises for user
+@app.route('/populate-exercises/', methods=['POST'])
+def populate_exercises():
+    db_prescribed_exercises = database.PrescribedExercises
+    db_plans = database.Plans
+    db_valid_exercises = database.ValidExercises
+    db_users = database.Users
+    content = request.get_json()
+    uniqueId = str(uuid.uuid4())
+
+    # Extract the username from the JSON payload
+    username = content['userName']
+
+    # Fetch valid exercises, relevant user plan
+    valid_exercises = db_valid_exercises.find({'uniqueId' : uniqueId})
+    plan = db_plans.find_one({'userName': username})
+    user = db_users.find({'userName': username})
+
+    # Extract exercise names, rehabWeeks, sets, and reps information from the plan
+    exercises = valid_exercises['exerciseNames'][0]
+    rehabWeeks = plan['rehabWeeks'][0]
+    sets = plan['sets'][1]
+    reps = plan['reps'][2]
+    hand = user['hand']
+
+    # Get the current date
+    current_date = datetime.now()
+
+    # Create a new entry in the PrescribedExercises database for each day in the rehabWeeks array
+    for i in range(len(rehabWeeks)):
+        if rehabWeeks[i] == 1:
+            for j in range(len(rehabWeeks[i])):
+                for k in range(len(exercises)):
+                    # Calculate the date for the exercise
+                    exercise_date = current_date + timedelta(days=j)
+
+                    # Create the exercise data
+                    exercise_data = {
+                        'uniqueId': uniqueId,
+                        'userName': username,
+                        'hand': hand,
+                        'date': exercise_date.strftime('YYYY-mm-dd'),
+                        'sets': sets[i],
+                        'exerciseName': exercises[k],
+                        'reps': reps[i],
+                        'completedReps': 0,
+                        'completedSets': 0,
+                        'maxAngle': 0.0,
+                        'difficultyRating': 0.0,
+                        'painRating': 0.0,
+                        'notes': 'N/A',
+                        'isCompleted': False
+                    }
+                     # Insert the exercise data into the PrescribedExercises database
+            db_prescribed_exercises.insert_one(exercise_data)   
+
+        elif rehabWeeks[i] == 2:
+            for j in range(len(rehabWeeks[i])):
+                for k in range(len(exercises)):
+                    # Calculate the date for the exercise
+                    exercise_date = current_date + timedelta(days=j)
+
+                    # Create the exercise data
+                    exercise_data = {
+                        'uniqueId': uniqueId,
+                        'userName': username,
+                        'hand': hand,
+                        'date': exercise_date.strftime('YYYY-mm-dd'),
+                        'sets': sets[i],
+                        'exerciseName': exercises[k],
+                        'reps': reps[i],
+                        'completedReps': 0,
+                        'completedSets': 0,
+                        'maxAngle': 0.0,
+                        'difficultyRating': 0.0,
+                        'painRating': 0.0,
+                        'notes': 'N/A',
+                        'isCompleted': False
+                    }
+
+            # Insert the exercise data into the PrescribedExercises database
+            db_prescribed_exercises.insert_one(exercise_data)
+            db_prescribed_exercises.insert_one(exercise_data)
+
+    return jsonify({'message': 'Exercises populated successfully'})
 
 # Prescribe exercise to user
 @app.route('/prescribe-exercise/', methods=['POST'])
@@ -429,7 +513,6 @@ def get_profile_data():
             }
     return jsonify({'result': data})
 
-
 # Get user info for mobile dashboard
 @app.route('/get-dashboard-data-app/', methods=['GET'])
 def get_dashboard_data():
@@ -562,24 +645,33 @@ def get_web_dashboard_data_():
             }
     return jsonify({'result': data})
 
+# # add user property for 1 week ago or 1 month ago that gets updated, use upload-completed-exercise for base
 # # Get line graph data
 # @app.route('/get-exercise-data/', methods=['GET'])
 # def get_exercise_data():
-#     username = request.args.get('userName')
-#     db_users = database.Users
-    
-#     if username is None:
-#         return jsonify({'message': 'Username is required'}), 400
-    
-#     user = db_users.find_one({'userName': username})
-
-#     data = {key: user[key] if key in user and user[key] is not None else -1000
-#                 for key in [ 
-#                     'maxWristFlexion', 'maxWristExtension',
-#                     'maxUlnarDeviation', 'maxRadialDeviation'
-#                 ]
+#     db_user_maxes = database.Users
+#     userName = request.args.get('userName')
+#     output = {
+#         'maxWristFlexion': [],
+#         'maxWristExtension': [],
+#         'maxUlnarDeviation': [],
+#         'maxRadialDeviation': []
 #     }
-#     return jsonify({'result': data})
+
+#     if userName is None:
+#         return jsonify({'message': 'Username is required'}), 400
+#     else:
+#         # Fetch the completed exercises for each week
+#         maxes = db_user_maxes.find({'userName': userName, 'status': 'completed'})
+#         if maxes is not None:
+#             for max in maxes:
+#                 week = max['week']
+#                 # Calculate the max values for each exercise type
+#                 output['maxWristFlexion'].append((week, max(exercise['wristFlexion'])))
+#                 output['maxWristExtension'].append((week, max(exercise['wristExtension'])))
+#                 output['maxUlnarDeviation'].append((week, max(exercise['ulnarDeviation'])))
+#                 output['maxRadialDeviation'].append((week, max(exercise['radialDeviation'])))
+#             return jsonify(output)
 
 # Get all-patients page data
 @app.route('/get-all-patients/', methods=['GET'])
