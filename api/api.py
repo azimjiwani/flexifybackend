@@ -187,7 +187,7 @@ def upload_patient_plan():
     username = content['userName']
 
     # Fetch valid exercises, relevant user plan
-    valid_exercises = db_valid_exercises.find_one({'uniqueId' : uniqueId})
+    valid_exercises = db_valid_exercises.find_one({'uniqueId' : 9999})
     plan = db_plans.find_one({'userName': username})
     user = db_users.find_one({'userName': username})
 
@@ -196,7 +196,6 @@ def upload_patient_plan():
     rehabWeeks = plan['rehabWeeks'][0]
     sets = plan['sets'][1]
     reps = plan['reps'][2]
-    hand = user['hand']
 
     # Get the current date
     current_date = datetime.now()
