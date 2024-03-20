@@ -633,8 +633,8 @@ def get_web_dashboard_data_():
                     'firstName', 'lastName',
                     'userName',
                     'hand', 'injury',
-                    'rehabStart', 'rehabEnd'
-                    'goals'
+                    'rehabStart', 'rehabEnd',
+                    'goals',
                     'currentWeek', 'injuryTime',
                     'exercisesCompleted', 'totalExercises',
                     'maxWristFlexion', 'targetWristFlexion',
@@ -645,33 +645,33 @@ def get_web_dashboard_data_():
             }
     return jsonify({'result': data})
 
-# # add user property for 1 week ago or 1 month ago that gets updated, use upload-completed-exercise for base
-# # Get line graph data
-# @app.route('/get-exercise-data/', methods=['GET'])
-# def get_exercise_data():
-#     db_user_maxes = database.Users
-#     userName = request.args.get('userName')
-#     output = {
-#         'maxWristFlexion': [],
-#         'maxWristExtension': [],
-#         'maxUlnarDeviation': [],
-#         'maxRadialDeviation': []
-#     }
+# add user property for 1 week ago or 1 month ago that gets updated, use upload-completed-exercise for base
+# Get line graph data
+@app.route('/get-exercise-data/', methods=['GET'])
+def get_exercise_data():
+    db_user_maxes = database.Users
+    userName = request.args.get('userName')
+    output = {
+        'maxWristFlexion': [],
+        'maxWristExtension': [],
+        'maxUlnarDeviation': [],
+        'maxRadialDeviation': []
+    }
 
-#     if userName is None:
-#         return jsonify({'message': 'Username is required'}), 400
-#     else:
-#         # Fetch the completed exercises for each week
-#         maxes = db_user_maxes.find({'userName': userName, 'status': 'completed'})
-#         if maxes is not None:
-#             for max in maxes:
-#                 week = max['week']
-#                 # Calculate the max values for each exercise type
-#                 output['maxWristFlexion'].append((week, max(exercise['wristFlexion'])))
-#                 output['maxWristExtension'].append((week, max(exercise['wristExtension'])))
-#                 output['maxUlnarDeviation'].append((week, max(exercise['ulnarDeviation'])))
-#                 output['maxRadialDeviation'].append((week, max(exercise['radialDeviation'])))
-#             return jsonify(output)
+    if userName is None:
+        return jsonify({'message': 'Username is required'}), 400
+    else:
+        # Fetch the completed exercises for each week
+        maxes = db_user_maxes.find({'userName': userName, 'status': 'completed'})
+        if maxes is not None:
+            for max in maxes:
+                week = max['week']
+                # Calculate the max values for each exercise type
+                output['maxWristFlexion'].append((week, max(exercise['wristFlexion'])))
+                output['maxWristExtension'].append((week, max(exercise['wristExtension'])))
+                output['maxUlnarDeviation'].append((week, max(exercise['ulnarDeviation'])))
+                output['maxRadialDeviation'].append((week, max(exercise['radialDeviation'])))
+            return jsonify(output)
 
 # Get all-patients page data
 @app.route('/get-all-patients/', methods=['GET'])
