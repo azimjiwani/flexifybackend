@@ -59,10 +59,10 @@ def create_user():
     }
 
     # Calculate rehabEnd
-    rehabStart = datetime.strptime(user_data['rehabStart'], '%Y-%m-%d')
+    rehabStart = datetime.strptime(user_data['rehabStart'], 'YYYY-mm-dd')
     injuryTime = user_data['injuryTime']
     rehabEnd = rehabStart + timedelta(weeks=injuryTime)
-    user_data['rehabEnd'] = rehabEnd.strftime('%Y-%m-%d')
+    user_data['rehabEnd'] = rehabEnd.strftime('YYYY-mm-dd')
 
      # Insert the exercise data into the database
     result = db_users.insert_one(user_data)
@@ -153,6 +153,56 @@ def get_goals():
                 }
                 output.append(data)
             return jsonify({'result': output})
+
+# Upload patient plan
+@app.route('/upload-patient-plan/', methods=['POST'])
+def upload_patient_plan():
+    db_plans = database.Plans
+    content = request.get_json()
+
+    # Extract data from the JSON payload
+    plan_data = {
+        'userName': content.get('userName'),
+        'rehabWeeks': content.get('rehabWeeks'),
+        'sets': content.get('sets'),
+        'reps': content.get('reps'),
+    }
+
+# Update the plan data in the database, or insert it if it doesn't exist
+    result = db_plans.update_one(
+        {'userName': plan_data['userName']},  # filter
+        [{'$set': plan_data}],  # update
+        upsert=True  # create a new document if no document matches the filter
+    )
+
+    if result.upserted_id or result.modified_count > 0:
+        return jsonify({'message': 'Plan updated successfully'}), 200
+    else:
+        return jsonify({'message': 'Failed to update plan'}), 500
+
+# Get patient plan
+@app.route('/get-patient-plan/', methods=['GET'])
+def get_patient_plan():
+    db_plans = database.Plans
+    userName = request.args.get('userName')
+    output = []
+
+    if userName is None:
+        return jsonify({'message': 'Username is required'}), 400
+    else:
+        plan = db_plans.find({'userName': userName})
+        if plan is not None:
+            for plans in plan:
+                data = {
+                    key: plans[key] if plans[key] is not None else -1000
+                    for key in [
+                        'rehabWeeks', 'sets', 'reps'
+                    ]
+                }
+                output.append(data)
+            return jsonify({'result': output})         
+
+# Populate prescribed exercises for user
 
 # Prescribe exercise to user
 @app.route('/prescribe-exercise/', methods=['POST'])
@@ -352,13 +402,10 @@ def upload_exercise():
     # # Insert the exercise data into the database
     # result = db_exercises.insert_one(exercise_data)
 
-
-
-    if result.inserted_id:
-        return jsonify({'message': 'Exercise uploaded successfully'}), 200
-    else:
-        return jsonify({'message': 'Failed to upload exercise'}), 500
-    
+    # if result.inserted_id:
+    #     return jsonify({'message': 'Exercise uploaded successfully'}), 200
+    # else:
+    #     return jsonify({'message': 'Failed to upload exercise'}), 500
 
 # Get user info for mobile dashboard
 @app.route('/get-profile-data-app/', methods=['GET'])
@@ -381,7 +428,7 @@ def get_profile_data():
                 ]
             }
     return jsonify({'result': data})
-    
+
 
 # Get user info for mobile dashboard
 @app.route('/get-dashboard-data-app/', methods=['GET'])
@@ -488,12 +535,51 @@ def get_dashboard_data():
 #     return jsonify({'results': output})
 
 # Get web patient dashboard data 
+@app.route('/get-dashboard-data-web/', methods=['GET'])
+def get_web_dashboard_data_():
+    username = request.args.get('userName')
+    db_users = database.Users
 
-# Patient plan
-# prioritize
+    if username is None:
+        return jsonify({'message': 'Username is required'}), 400
+    
+    user = db_users.find_one({'userName': username})
+    # add way to see last month and last week 
+    data = {key: user[key] if key in user and user[key] is not None else -1000
+                for key in [
+                    'firstName', 'lastName',
+                    'userName',
+                    'hand', 'injury',
+                    'rehabStart', 'rehabEnd'
+                    'goals'
+                    'currentWeek', 'injuryTime',
+                    'exercisesCompleted', 'totalExercises',
+                    'maxWristFlexion', 'targetWristFlexion',
+                    'maxWristExtension', 'targetWristExtension',
+                    'maxUlnarDeviation', 'targetUlnarDeviation',
+                    'maxRadialDeviation', 'targetRadialDeviation',
+                ]
+            }
+    return jsonify({'result': data})
 
-# Line graphs
-# prioritize
+# # Get line graph data
+# @app.route('/get-exercise-data/', methods=['GET'])
+# def get_exercise_data():
+#     username = request.args.get('userName')
+#     db_users = database.Users
+    
+#     if username is None:
+#         return jsonify({'message': 'Username is required'}), 400
+    
+#     user = db_users.find_one({'userName': username})
+
+#     data = {key: user[key] if key in user and user[key] is not None else -1000
+#                 for key in [ 
+#                     'maxWristFlexion', 'maxWristExtension',
+#                     'maxUlnarDeviation', 'maxRadialDeviation'
+#                 ]
+#     }
+#     return jsonify({'result': data})
 
 # Get all-patients page data
 @app.route('/get-all-patients/', methods=['GET'])
