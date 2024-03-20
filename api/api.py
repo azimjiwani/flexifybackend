@@ -175,36 +175,7 @@ def upload_patient_plan():
         upsert=True  # create a new document if no document matches the filter
     )
 
-    if result.upserted_id or result.modified_count > 0:
-        return jsonify({'message': 'Plan updated successfully'}), 200
-    else:
-        return jsonify({'message': 'Failed to update plan'}), 500
-
-# Get patient plan
-@app.route('/get-patient-plan/', methods=['GET'])
-def get_patient_plan():
-    db_plans = database.Plans
-    userName = request.args.get('userName')
-    output = []
-
-    if userName is None:
-        return jsonify({'message': 'Username is required'}), 400
-    else:
-        plan = db_plans.find({'userName': userName})
-        if plan is not None:
-            for plans in plan:
-                data = {
-                    key: plans[key] if plans[key] is not None else -1000
-                    for key in [
-                        'rehabWeeks', 'sets', 'reps'
-                    ]
-                }
-                output.append(data)
-            return jsonify({'result': output})         
-
-# Populate prescribed exercises for user
-@app.route('/populate-exercises/', methods=['POST'])
-def populate_exercises():
+    # time.sleep(3)
     db_prescribed_exercises = database.PrescribedExercises
     db_plans = database.Plans
     db_valid_exercises = database.ValidExercises
@@ -287,6 +258,33 @@ def populate_exercises():
             db_prescribed_exercises.insert_one(exercise_data)
 
     return jsonify({'message': 'Exercises populated successfully'})
+
+    if result.upserted_id or result.modified_count > 0:
+        return jsonify({'message': 'Plan updated successfully'}), 200
+    else:
+        return jsonify({'message': 'Failed to update plan'}), 500
+
+# Get patient plan
+@app.route('/get-patient-plan/', methods=['GET'])
+def get_patient_plan():
+    db_plans = database.Plans
+    userName = request.args.get('userName')
+    output = []
+
+    if userName is None:
+        return jsonify({'message': 'Username is required'}), 400
+    else:
+        plan = db_plans.find({'userName': userName})
+        if plan is not None:
+            for plans in plan:
+                data = {
+                    key: plans[key] if plans[key] is not None else -1000
+                    for key in [
+                        'rehabWeeks', 'sets', 'reps'
+                    ]
+                }
+                output.append(data)
+            return jsonify({'result': output})         
 
 # Prescribe exercise to user
 @app.route('/prescribe-exercise/', methods=['POST'])
@@ -645,33 +643,33 @@ def get_web_dashboard_data_():
             }
     return jsonify({'result': data})
 
-# add user property for 1 week ago or 1 month ago that gets updated, use upload-completed-exercise for base
-# Get line graph data
-@app.route('/get-exercise-data/', methods=['GET'])
-def get_exercise_data():
-    db_user_maxes = database.Users
-    userName = request.args.get('userName')
-    output = {
-        'maxWristFlexion': [],
-        'maxWristExtension': [],
-        'maxUlnarDeviation': [],
-        'maxRadialDeviation': []
-    }
+# # add user property for 1 week ago or 1 month ago that gets updated, use upload-completed-exercise for base
+# # Get line graph data
+# @app.route('/get-exercise-data/', methods=['GET'])
+# def get_exercise_data():
+#     db_user_maxes = database.Users
+#     userName = request.args.get('userName')
+#     output = {
+#         'maxWristFlexion': [],
+#         'maxWristExtension': [],
+#         'maxUlnarDeviation': [],
+#         'maxRadialDeviation': []
+#     }
 
-    if userName is None:
-        return jsonify({'message': 'Username is required'}), 400
-    else:
-        # Fetch the completed exercises for each week
-        maxes = db_user_maxes.find({'userName': userName, 'status': 'completed'})
-        if maxes is not None:
-            for max in maxes:
-                week = max['week']
-                # Calculate the max values for each exercise type
-                output['maxWristFlexion'].append((week, max(exercise['wristFlexion'])))
-                output['maxWristExtension'].append((week, max(exercise['wristExtension'])))
-                output['maxUlnarDeviation'].append((week, max(exercise['ulnarDeviation'])))
-                output['maxRadialDeviation'].append((week, max(exercise['radialDeviation'])))
-            return jsonify(output)
+#     if userName is None:
+#         return jsonify({'message': 'Username is required'}), 400
+#     else:
+#         # Fetch the completed exercises for each week
+#         maxes = db_user_maxes.find({'userName': userName, 'status': 'completed'})
+#         if maxes is not None:
+#             for max in maxes:
+#                 week = max['week']
+#                 # Calculate the max values for each exercise type
+#                 output['maxWristFlexion'].append((week, max(exercise['wristFlexion'])))
+#                 output['maxWristExtension'].append((week, max(exercise['wristExtension'])))
+#                 output['maxUlnarDeviation'].append((week, max(exercise['ulnarDeviation'])))
+#                 output['maxRadialDeviation'].append((week, max(exercise['radialDeviation'])))
+#             return jsonify(output)
 
 # Get all-patients page data
 @app.route('/get-all-patients/', methods=['GET'])
