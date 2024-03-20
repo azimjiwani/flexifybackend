@@ -376,7 +376,7 @@ def get_profile_data():
                     'firstName', 'lastName',
                     'userName',
                     'hand', 'injury',
-                    'rehabStart', 'rehabEnd'
+                    'rehabStart', 'rehabEnd',
                     'goal1', 'goal2', 'goal3'
                 ]
             }
