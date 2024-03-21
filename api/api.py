@@ -379,7 +379,7 @@ def get_completed_exercises():
                 'painRating', 
                 'notes', 
                 'date',
-                'isCompleted'
+                'isCompleted',
                 'uniqueId'
             ]
         }
