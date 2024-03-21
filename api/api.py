@@ -698,6 +698,10 @@ def get_web_dashboard_data_():
                     'maxWristExtension', 'targetWristExtension',
                     'maxUlnarDeviation', 'targetUlnarDeviation',
                     'maxRadialDeviation', 'targetRadialDeviation',
+                    'wfLastWeek', 'wfLastMonth', 'wfAllTime',
+                    'weLastWeek', 'weLastMonth', 'weAllTime',
+                    'udLastWeek', 'udLastMonth', 'udAllTime',
+                    'rdLastWeek', 'rdLastMonth', 'rdAllTime'
                 ]
             }
     return jsonify({'result': data})
