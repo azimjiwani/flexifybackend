@@ -63,10 +63,10 @@ def create_user():
     }
 
     # Calculate rehabEnd
-    rehabStart = datetime.strptime(user_data['rehabStart'], 'YYYY-mm-dd')
+    rehabStart = datetime.strptime(user_data['rehabStart'], '%Y-%m-%d')
     injuryTime = user_data['injuryTime']
     rehabEnd = rehabStart + timedelta(weeks=injuryTime)
-    user_data['rehabEnd'] = rehabEnd.strftime('YYYY-mm-dd')
+    user_data['rehabEnd'] = rehabEnd.strftime('%Y-%m-%d')
 
      # Insert the exercise data into the database
     result = db_users.insert_one(user_data)
@@ -198,7 +198,7 @@ def upload_patient_plan():
     user = db_users.find_one({'userName': username})
 
     # Extract exercise names, rehabWeeks, sets, and reps information from the plan
-    exercises = valid_exercises['exerciseNames']
+    exercises = valid_exercises['exercises']
     rehabWeeks = plan['rehabWeeks']
     sets = plan['sets']
     reps = plan['reps']
@@ -228,7 +228,7 @@ def upload_patient_plan():
                 'difficultyRating': 0,
                 'painRating': 0,
                 'notes': 'N/A',
-                'date': totalDates[day].strftime("YYYY-mm-dd"),
+                'date': totalDates[day].strftime("%Y-%m-%d"),
                 'isCompleted': False
             }
             for session in range(dailyExerciseAmount-1):
