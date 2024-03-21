@@ -342,7 +342,6 @@ def get_completed_exercises():
                 'userName',
                 'exerciseName', 
                 'hand', 
-                'description', 
                 'reps', 
                 'sets', 
                 'completedReps', 
