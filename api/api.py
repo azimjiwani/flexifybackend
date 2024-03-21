@@ -402,6 +402,11 @@ def upload_exercise():
         
         updateResult = db_users.update_one(userQuery, userNewValues)
 
+        if updateResult.modified_count > 0:
+            return jsonify({'message': 'matched'}), 200
+        else:
+            return jsonify({'message': 'not matched'}), 305
+
     else:
         return jsonify({'message': 'User not found'}), 404
 
