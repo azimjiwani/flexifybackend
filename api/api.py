@@ -683,7 +683,7 @@ def get_web_dashboard_data_():
 # Get line graph data
 @app.route('/get-exercise-data/', methods=['GET'])
 def get_exercise_data():
-    db_user_maxes = database.Users
+    db_user_maxes = database.PrescribedExercises
     userName = request.args.get('userName')
     output = {
         'maxWristFlexionArray': [],
