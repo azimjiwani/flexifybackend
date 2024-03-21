@@ -356,82 +356,112 @@ def upload_exercise():
     user = db_users.find_one({'userName': username})
 
     if user is not None:
-        userWeek = user['currentWeek']
-
-        userExercisesCompleted = user['exercisesCompleted']
-        userMaxWristFlexion = user['maxWristFlexion']
-        userMaxWristExtension = user['maxWristExtension']
-        userMaxUlnarDeviation = user['maxUlnarDeviation']
-        userMaxRadialDeviation = user['maxRadialDeviation']
-
-        # compute number of weeks between userWeek and current date
-        userWeek = datetime.strptime(user['rehabStart'], '%Y-%m-%d')
-        currentDate = datetime.now()
-        diff = currentDate - userWeek
-        currentWeek = diff.days // 7
-        if currentWeek < 1:
-            currentWeek = 1
-
-        # update user week
-        userQuery = {"userName": username}
-        userNewValues = {"$set": 
-                        {
-                            "currentWeek": currentWeek,
-                            "exercisesCompleted": userExercisesCompleted + 1
-                        }
-                        }
-        
-        if content['exerciseName'] == "Wrist Flexion":
-            userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
-        
-        elif content['exerciseName'] == "Wrist Extension":
-            userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
-        
-        elif content['exerciseName'] == "Ulnar Deviation":
-            userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
-
-        elif content['exerciseName'] == "Radial Deviation":
-            userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
-        
-        updateResult = db_users.update_one(userQuery, userNewValues)
-
+        return jsonify({'message': 'User found'}), 200
     else:
         return jsonify({'message': 'User not found'}), 404
 
-    # for exerciseName in ["Wrist Flexion", "Wrist Extension", "Ulnar Deviation", "Radial Deviation"]:
+# User upload completed exercise
+# @app.route('/upload-completed-exercise/', methods=['POST'])
+# def upload_exercise():
+#     db_exercises = database.PrescribedExercises
+#     username = request.args.get('userName')
+#     uniqueId = request.args.get('uniqueId')
+#     content = request.get_json()
 
-    # all time percent difference
-    firstEntry = db_users.find_one({'userName': content['userName'], 'date': user['rehabStart']})
-    if firstEntry is not None:
-        firstEntryMaxAngle = firstEntry['maxAngle']
-        allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
-
-    # last week percent difference
-    lastWeek = datetime.now() - timedelta(days=7)
-    lastWeekEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastWeek)})
-    if lastWeekEntry is not None:
-        lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
-        lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
-
-    # last month percent difference
-    lastMonth = datetime.now() - timedelta(days=30)
-    lastMonthEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastMonth)})
-    if lastMonthEntry is not None:
-        lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
-        lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
-
-    if result.modified_count > 0 and updateResult.modified_count > 0:
-        return jsonify({'message': 'Exercise uploaded and updated successfully'}), 200
-    else:
-        return jsonify({'message': 'Failed to upload and update exercise'}), 500
+#     myQuery = { "uniqueId": uniqueId}
+#     newValues = {"$set":
+#                  {"isCompleted": True,
+#                   "completedReps": content['completedReps'],
+#                   "completedSets": content['completedSets'],
+#                   "maxAngle": content['maxAngle'],
+#                   "difficultyRating": content['difficultyRating'],
+#                   "painRating": content['painRating'],
+#                   "notes": content['notes']}
+#                  }
     
-    if result.matched_count > 0:
-        if result.modified_count > 0:
-            return jsonify({'message': 'Exercise updated successfully'}), 200
-        else:
-            return jsonify({'message': 'Exercise was already up-to-date'}), 200
-    else:
-        return jsonify({'message': 'No exercise matched the given query'}), 404
+#     result = db_exercises.update_one(myQuery,newValues)
+
+#     # get user from DB
+#     db_users = database.Users
+#     user = db_users.find_one({'userName': username})
+
+#     if user is not None:
+#         userWeek = user['currentWeek']
+
+#         userExercisesCompleted = user['exercisesCompleted']
+#         userMaxWristFlexion = user['maxWristFlexion']
+#         userMaxWristExtension = user['maxWristExtension']
+#         userMaxUlnarDeviation = user['maxUlnarDeviation']
+#         userMaxRadialDeviation = user['maxRadialDeviation']
+
+#         # compute number of weeks between userWeek and current date
+#         userWeek = datetime.strptime(user['rehabStart'], '%Y-%m-%d')
+#         currentDate = datetime.now()
+#         diff = currentDate - userWeek
+#         currentWeek = diff.days // 7
+#         if currentWeek < 1:
+#             currentWeek = 1
+
+#         # update user week
+#         userQuery = {"userName": username}
+#         userNewValues = {"$set": 
+#                         {
+#                             "currentWeek": currentWeek,
+#                             "exercisesCompleted": userExercisesCompleted + 1
+#                         }
+#                         }
+        
+#         if content['exerciseName'] == "Wrist Flexion":
+#             userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
+        
+#         elif content['exerciseName'] == "Wrist Extension":
+#             userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
+        
+#         elif content['exerciseName'] == "Ulnar Deviation":
+#             userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
+
+#         elif content['exerciseName'] == "Radial Deviation":
+#             userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
+        
+#         updateResult = db_users.update_one(userQuery, userNewValues)
+
+#     else:
+#         return jsonify({'message': 'User not found'}), 404
+
+#     # for exerciseName in ["Wrist Flexion", "Wrist Extension", "Ulnar Deviation", "Radial Deviation"]:
+
+#     # all time percent difference
+#     firstEntry = db_users.find_one({'userName': content['userName'], 'date': user['rehabStart']})
+#     if firstEntry is not None:
+#         firstEntryMaxAngle = firstEntry['maxAngle']
+#         allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
+
+#     # last week percent difference
+#     lastWeek = datetime.now() - timedelta(days=7)
+#     lastWeekEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastWeek)})
+#     if lastWeekEntry is not None:
+#         lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
+#         lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
+
+#     # last month percent difference
+#     lastMonth = datetime.now() - timedelta(days=30)
+#     lastMonthEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastMonth)})
+#     if lastMonthEntry is not None:
+#         lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
+#         lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
+
+#     if result.modified_count > 0 and updateResult.modified_count > 0:
+#         return jsonify({'message': 'Exercise uploaded and updated successfully'}), 200
+#     else:
+#         return jsonify({'message': 'Failed to upload and update exercise'}), 500
+    
+#     if result.matched_count > 0:
+#         if result.modified_count > 0:
+#             return jsonify({'message': 'Exercise updated successfully'}), 200
+#         else:
+#             return jsonify({'message': 'Exercise was already up-to-date'}), 200
+#     else:
+#         return jsonify({'message': 'No exercise matched the given query'}), 404
     
     # # Extract data from the JSON payload
     # exercise_data = {
