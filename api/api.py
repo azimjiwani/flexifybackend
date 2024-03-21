@@ -55,7 +55,12 @@ def create_user():
         'maxWristFlexion': 0,
         'maxWristExtension': 0,
         'maxUlnarDeviation': 0,
-        'maxRadialDeviation': 0
+        'maxRadialDeviation': 0,
+        'wfLastWeek': 0, 'wfLastMonth': 0,'wfAllTime': 0,
+        'weLastWeek': 0, 'weLastMonth': 0,'weAllTime': 0,
+        'udLastWeek': 0, 'udLastMonth': 0,'udAllTime': 0,
+        'rdLastWeek': 0, 'rdLastMonth': 0,'rdAllTime': 0,
+        # add all new fields
     }
 
     # Calculate rehabEnd
