@@ -423,15 +423,107 @@ def upload_exercise():
         
         if content['name'] == "Wrist Flexion":
             userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
+
+            # all time percent difference
+            firstEntry = db_users.find_one({'userName': content['userName'], 'date': user['rehabStart']})
+            if firstEntry is not None:
+                firstEntryMaxAngle = firstEntry['maxAngle']
+                allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
+                userNewValues['$set']['wfAllTime'] = allTimePercentDifference
+
+            # last week percent difference
+            lastWeek = datetime.now() - timedelta(days=7)
+            lastWeekEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastWeek)})
+            if lastWeekEntry is not None:
+                lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
+                lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
+                userNewValues['$set']['wfLastWeek'] = lastWeekPercentDifference
+
+            # last month percent difference
+            lastMonth = datetime.now() - timedelta(days=30)
+            lastMonthEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastMonth)})
+            if lastMonthEntry is not None:
+                lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
+                lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
+                userNewValues['$set']['wfLastMonth'] = lastMonthPercentDifference
         
         elif content['name'] == "Wrist Extension":
             userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
+
+            # all time percent difference
+            firstEntry = db_users.find_one({'userName': content['userName'], 'date': user['rehabStart']})
+            if firstEntry is not None:
+                firstEntryMaxAngle = firstEntry['maxAngle']
+                allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
+                userNewValues['$set']['wEAllTime'] = allTimePercentDifference
+
+            # last week percent difference
+            lastWeek = datetime.now() - timedelta(days=7)
+            lastWeekEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastWeek)})
+            if lastWeekEntry is not None:
+                lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
+                lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
+                userNewValues['$set']['wELastWeek'] = lastWeekPercentDifference
+
+            # last month percent difference
+            lastMonth = datetime.now() - timedelta(days=30)
+            lastMonthEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastMonth)})
+            if lastMonthEntry is not None:
+                lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
+                lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
+                userNewValues['$set']['wELastMonth'] = lastMonthPercentDifference
         
         elif content['name'] == "Ulnar Deviation":
             userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
 
+            # all time percent difference
+            firstEntry = db_users.find_one({'userName': content['userName'], 'date': user['rehabStart']})
+            if firstEntry is not None:
+                firstEntryMaxAngle = firstEntry['maxAngle']
+                allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
+                userNewValues['$set']['udAllTime'] = allTimePercentDifference
+
+            # last week percent difference
+            lastWeek = datetime.now() - timedelta(days=7)
+            lastWeekEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastWeek)})
+            if lastWeekEntry is not None:
+                lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
+                lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
+                userNewValues['$set']['udLastWeek'] = lastWeekPercentDifference
+
+            # last month percent difference
+            lastMonth = datetime.now() - timedelta(days=30)
+            lastMonthEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastMonth)})
+            if lastMonthEntry is not None:
+                lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
+                lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
+                userNewValues['$set']['udLastMonth'] = lastMonthPercentDifference
+
         elif content['name'] == "Radial Deviation":
             userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
+
+            # all time percent difference
+            firstEntry = db_users.find_one({'userName': content['userName'], 'date': user['rehabStart']})
+            if firstEntry is not None:
+                firstEntryMaxAngle = firstEntry['maxAngle']
+                allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
+                userNewValues['$set']['rdAllTime'] = allTimePercentDifference
+
+            # last week percent difference
+            lastWeek = datetime.now() - timedelta(days=7)
+            lastWeekEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastWeek)})
+            if lastWeekEntry is not None:
+                lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
+                lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
+                userNewValues['$set']['rdLastWeek'] = lastWeekPercentDifference
+
+            # last month percent difference
+            lastMonth = datetime.now() - timedelta(days=30)
+            lastMonthEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastMonth)})
+            if lastMonthEntry is not None:
+                lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
+                lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
+                userNewValues['$set']['rdLastMonth'] = lastMonthPercentDifference
         
         updateResult = db_users.update_one(userQuery, userNewValues)
 
