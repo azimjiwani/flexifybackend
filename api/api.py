@@ -189,7 +189,7 @@ def upload_patient_plan():
     # 'userName': content.get('userName'),
 
     # Fetch valid exercises, relevant user plan
-    valid_exercises = db_valid_exercises.find_one({'uniqueId' : 9999})
+    valid_exercises = db_valid_exercises.find_one({'uniqueId' : '9999'})
     plan = db_plans.find_one({'userName': username})
     user = db_users.find_one({'userName': username})
 
