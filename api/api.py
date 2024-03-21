@@ -455,7 +455,7 @@ def upload_exercise():
             if firstEntry is not None:
                 firstEntryMaxAngle = firstEntry['maxAngle']
                 allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
-                userNewValues['$set']['wEAllTime'] = allTimePercentDifference
+                userNewValues['$set']['weAllTime'] = allTimePercentDifference
 
             # last week percent difference
             lastWeek = datetime.now() - timedelta(days=7)
@@ -463,7 +463,7 @@ def upload_exercise():
             if lastWeekEntry is not None:
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
-                userNewValues['$set']['wELastWeek'] = lastWeekPercentDifference
+                userNewValues['$set']['weLastWeek'] = lastWeekPercentDifference
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
@@ -471,7 +471,7 @@ def upload_exercise():
             if lastMonthEntry is not None:
                 lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
                 lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
-                userNewValues['$set']['wELastMonth'] = lastMonthPercentDifference
+                userNewValues['$set']['weLastMonth'] = lastMonthPercentDifference
         
         elif content['name'] == "Ulnar Deviation":
             userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
