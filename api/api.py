@@ -223,7 +223,7 @@ def upload_patient_plan():
 
     # Update the user's total exercises
     totalExercises = db_prescribed_exercises.count_documents({'userName': username})
-    db_users.update_one({'userName': username}, {'$set': {'totalExercises': totalExercises}})
+    updateResult = db_users.update_one({'userName': username}, {'$set': {'totalExercises': totalExercises}})
 
     if result.upserted_id or result.modified_count > 0:
         return jsonify({'message': 'Plan updated successfully'}), 200
