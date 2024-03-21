@@ -424,7 +424,8 @@ def upload_exercise():
             userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
 
             # all time percent difference
-            firstEntry = db_exercises.find_one({'userName': username, 'date': user['rehabStart']})
+            date = user['rehabStart']
+            firstEntry = db_exercises.find_one({'userName': username, 'date': date})
             if firstEntry is not None:
                 firstEntryMaxAngle = firstEntry['maxAngle']
                 allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
@@ -432,7 +433,8 @@ def upload_exercise():
 
             # last week percent difference
             lastWeek = datetime.now() - timedelta(days=7)
-            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': str(lastWeek)})
+            date = lastWeek.strftime('%Y-%m-%d')
+            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': date})
             if lastWeekEntry is not None:
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
@@ -440,7 +442,8 @@ def upload_exercise():
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
-            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': str(lastMonth)})
+            date = lastMonth.strftime('%Y-%m-%d')
+            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': date})
             if lastMonthEntry is not None:
                 lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
                 lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
@@ -450,7 +453,8 @@ def upload_exercise():
             userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
 
             # all time percent difference
-            firstEntry = db_exercises.find_one({'userName': username, 'date': user['rehabStart']})
+            date = user['rehabStart']
+            firstEntry = db_exercises.find_one({'userName': username, 'date': date})
             if firstEntry is not None:
                 firstEntryMaxAngle = firstEntry['maxAngle']
                 allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
@@ -458,7 +462,8 @@ def upload_exercise():
 
             # last week percent difference
             lastWeek = datetime.now() - timedelta(days=7)
-            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': str(lastWeek)})
+            date = lastWeek.strftime('%Y-%m-%d')
+            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': date})
             if lastWeekEntry is not None:
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
@@ -466,7 +471,8 @@ def upload_exercise():
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
-            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': str(lastMonth)})
+            date = lastMonth.strftime('%Y-%m-%d')
+            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': date})
             if lastMonthEntry is not None:
                 lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
                 lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
@@ -476,7 +482,8 @@ def upload_exercise():
             userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
 
             # all time percent difference
-            firstEntry = db_exercises.find_one({'userName': username, 'date': user['rehabStart']})
+            date = user['rehabStart']
+            firstEntry = db_exercises.find_one({'userName': username, 'date': date})
             if firstEntry is not None:
                 firstEntryMaxAngle = firstEntry['maxAngle']
                 allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
@@ -484,7 +491,8 @@ def upload_exercise():
 
             # last week percent difference
             lastWeek = datetime.now() - timedelta(days=7)
-            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': str(lastWeek)})
+            date = lastWeek.strftime('%Y-%m-%d')
+            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': date})
             if lastWeekEntry is not None:
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
@@ -492,7 +500,8 @@ def upload_exercise():
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
-            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': str(lastMonth)})
+            date = lastMonth.strftime('%Y-%m-%d')
+            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': date})
             if lastMonthEntry is not None:
                 lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
                 lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
@@ -502,7 +511,8 @@ def upload_exercise():
             userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
 
             # all time percent difference
-            firstEntry = db_exercises.find_one({'userName': username, 'date': user['rehabStart']})
+            date = user['rehabStart']
+            firstEntry = db_exercises.find_one({'userName': username, 'date': date})
             if firstEntry is not None:
                 firstEntryMaxAngle = firstEntry['maxAngle']
                 allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
@@ -510,7 +520,8 @@ def upload_exercise():
 
             # last week percent difference
             lastWeek = datetime.now() - timedelta(days=7)
-            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': str(lastWeek)})
+            date = lastWeek.strftime('%Y-%m-%d')
+            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': date})
             if lastWeekEntry is not None:
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
@@ -520,7 +531,8 @@ def upload_exercise():
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
-            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': str(lastMonth)})
+            date = lastMonth.strftime('%Y-%m-%d')
+            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': date})
             if lastMonthEntry is not None:
                 lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
                 lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
