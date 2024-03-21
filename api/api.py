@@ -199,11 +199,12 @@ def upload_patient_plan():
     sets = plan['sets']
     reps = plan['reps']
     hand = user['hand']
+    rehabStart = user['rehabStart']
     
     totalDays = len(rehabWeeks) * len(rehabWeeks[0])
     dailyExerciseAmount = rehabWeeks[0][0]
     
-    currentDate = #rehabStart
+    currentDate = rehabStart
     totalDates = []
     for day in range(totalDays):
         totalDates.append(currentDate + timedelta(days=day))
