@@ -39,7 +39,7 @@ def create_user():
         hand = False
 
     rehabStart = content.get('rehabStart')
-    if isinstance(rehabStart, datetime.datetime):
+    if isinstance(rehabStart, datetime):
         rehabStart = rehabStart.strftime('%Y-%m-%d')
 
     # Extract data from the JSON payload
