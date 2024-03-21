@@ -270,7 +270,6 @@ def prescribe_exercise():
         'uniqueId': uniqueId, 
         'userName': content.get('userName'),
         'exerciseName': content.get('exerciseName'),
-        'description': content.get('description'),
         'hand': content.get('hand'),
         'reps': content.get('reps'),
         'sets': content.get('sets'),
@@ -300,7 +299,7 @@ def get_prescribed_exercises():
             data = {
                 key: exercise[key] if key in exercise and exercise[key] is not None else -1000
                 for key in [
-                    'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 'uniqueId'
+                    'userName', 'exerciseName', 'hand', 'reps', 'sets', 'date', 'isCompleted', 'uniqueId'
                 ]
             }
             output.append(data)
@@ -312,7 +311,7 @@ def get_prescribed_exercises():
             data = {
                 key: exercise[key] if key in exercise and exercise[key] is not None else -1000
                 for key in [
-                    'userName', 'exerciseName', 'description', 'hand', 'reps', 'sets', 'date', 'isCompleted', 'uniqueId'
+                    'userName', 'exerciseName', 'hand', 'reps', 'sets', 'date', 'isCompleted', 'uniqueId'
                 ]
             }
             output.append(data)
@@ -776,7 +775,7 @@ def get_exercises():
         data = {
             key: exercise[key] if exercise[key] is not None else -1000
             for key in [
-                'exerciseName', 'description', 'hand', 'reps', 'sets'
+                'exerciseName', 'hand', 'reps', 'sets'
             ]
         }
         output.append(data)
