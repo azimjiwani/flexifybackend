@@ -182,7 +182,6 @@ def upload_patient_plan():
     # Populate prescribed exercises collection with exercises for user based on patient plan 
     # time.sleep(3)
     db_prescribed_exercises = database.PrescribedExercises
-    db_plans = database.Plans
     db_valid_exercises = database.ValidExercises
     db_users = database.Users
     content = request.get_json()
@@ -208,7 +207,7 @@ def upload_patient_plan():
     totalDays = len(rehabWeeks) * len(rehabWeeks[0])
     dailyExerciseAmount = rehabWeeks[0][0]
     
-    currentDate = rehabStart
+    currentDate = datetime.strptime(user['rehabStart'], '%Y-%m-%d')
     totalDates = []
     for day in range(totalDays):
         totalDates.append(currentDate + timedelta(days=day))
