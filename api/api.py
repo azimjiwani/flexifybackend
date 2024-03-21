@@ -353,6 +353,10 @@ def upload_exercise():
 
     # get user from DB
     db_users = database.Users
+
+    if username is None:
+        return jsonify({'message': 'Username is required'}), 300
+    
     user = db_users.find_one({'userName': username})
 
     if user is not None:
