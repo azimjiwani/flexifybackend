@@ -32,6 +32,11 @@ def home():
 def create_user():
     db_users = database.Users
     content = request.get_json()
+    hand = True
+    if content.get('hand') == 'Left':
+        hand = True
+    else:
+        hand = False
 
     # Extract data from the JSON payload
     user_data = {
@@ -41,7 +46,7 @@ def create_user():
         # 'password': content.get('password'),
         'email': content.get('email'),
         'dateOfBirth': content.get('dateOfBirth'),
-        'hand': content.get('hand'),
+        'hand': hand,
         'injury': content.get('injury'),
         'rehabStart': content.get('rehabStart'),
         'injuryTime': content.get('injuryTime'),
@@ -680,7 +685,7 @@ def get_web_dashboard_data_():
                     'wfLastWeek', 'wfLastMonth', 'wfAllTime',
                     'weLastWeek', 'weLastMonth', 'weAllTime',
                     'udLastWeek', 'udLastMonth', 'udAllTime',
-                    'rdLastWeek', 'rdLastMonth', 'rdAllTime'
+                    'rdLastWeek', 'rdLastMonth', 'rdAllTime',
                 ]
             }
     return jsonify({'result': data})
