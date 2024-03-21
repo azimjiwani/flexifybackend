@@ -191,6 +191,7 @@ def upload_patient_plan():
     
     totalDays = len(rehabWeeks) * len(rehabWeeks[0])
 
+    
     if isinstance(rehabStart, datetime.datetime):
         currentDate = rehabStart
     else:
@@ -333,7 +334,6 @@ def get_completed_exercises():
             for key in [
                 'userName',
                 'exerciseName',
-                'name', 
                 'hand', 
                 'reps', 
                 'sets', 
