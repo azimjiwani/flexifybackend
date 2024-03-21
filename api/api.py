@@ -700,10 +700,15 @@ def get_exercise_data():
     else:
         userData = db_user_maxes.find({'userName': userName, 'isCompleted': True})
         for data in userData:
-            output['maxWristFlexionArray'].append(data['maxWristFlexion'])
-            output['maxWristExtensionArray'].append(data['maxWristExtension'])
-            output['maxUlnarDeviationArray'].append(data['maxUlnarDeviation'])
-            output['maxRadialDeviationArray'].append(data['maxRadialDeviation'])
+            if data['name'] == "Wrist Flexion":
+                output['maxWristFlexionArray'].append(data['maxAngle'])
+            elif data['name'] == "Wrist Extension":
+                output['maxWristExtensionArray'].append(data['maxAngle'])
+            elif data['name'] == "Ulnar Deviation":
+                output['maxUlnarDeviationArray'].append(data['maxAngle'])
+            elif data['name'] == "Radial Deviation":
+                output['maxRadialDeviationArray'].append(data['maxAngle'])
+
             output['painArray'].append(data['painRating'])
             output['difficultyArray'].append(data['difficultyRating'])
 
