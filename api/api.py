@@ -200,63 +200,6 @@ def upload_patient_plan():
     # Get the current date
     current_date = datetime.now()
 
-    # Create a new entry in the PrescribedExercises database for each day in the rehabWeeks array
-    for i in range(len(rehabWeeks)):
-        if rehabWeeks[i] == 1:
-            for j in range(len(rehabWeeks[i])):
-                for k in range(len(exercises)):
-                    # Calculate the date for the exercise
-                    exercise_date = current_date + timedelta(days=j)
-
-                    # Create the exercise data
-                    exercise_data = {
-                        'uniqueId': uniqueId,
-                        'userName': username,
-                        'hand': hand,
-                        'date': exercise_date.strftime('YYYY-mm-dd'),
-                        'sets': sets[i],
-                        'exerciseName': exercises[k],
-                        'reps': reps[i],
-                        'completedReps': 0,
-                        'completedSets': 0,
-                        'maxAngle': 0.0,
-                        'difficultyRating': 0.0,
-                        'painRating': 0.0,
-                        'notes': 'N/A',
-                        'isCompleted': False
-                    }
-                     # Insert the exercise data into the PrescribedExercises database
-            db_prescribed_exercises.insert_one(exercise_data)   
-
-        elif rehabWeeks[i] == 2:
-            for j in range(len(rehabWeeks[i])):
-                for k in range(len(exercises)):
-                    # Calculate the date for the exercise
-                    exercise_date = current_date + timedelta(days=j)
-
-                    # Create the exercise data
-                    exercise_data = {
-                        'uniqueId': uniqueId,
-                        'userName': username,
-                        'hand': hand,
-                        'date': exercise_date.strftime('YYYY-mm-dd'),
-                        'sets': sets[i],
-                        'exerciseName': exercises[k],
-                        'reps': reps[i],
-                        'completedReps': 0,
-                        'completedSets': 0,
-                        'maxAngle': 0.0,
-                        'difficultyRating': 0.0,
-                        'painRating': 0.0,
-                        'notes': 'N/A',
-                        'isCompleted': False
-                    }
-
-            # Insert the exercise data into the PrescribedExercises database
-            db_prescribed_exercises.insert_one(exercise_data)
-            db_prescribed_exercises.insert_one(exercise_data)
-
-    return jsonify({'message': 'Exercises populated successfully'})
 
     if result.upserted_id or result.modified_count > 0:
         return jsonify({'message': 'Plan updated successfully'}), 200
@@ -628,7 +571,7 @@ def get_web_dashboard_data_():
     if user is None:
         return jsonify({'message': 'User not found'}), 404
 
-    data = {key: user[key] if key in user and user[key] is not None else -1000
+    data = {key: user[key] if key in user and user[key] is not None else 0
                 for key in [
                     'firstName', 'lastName',
                     'userName',
