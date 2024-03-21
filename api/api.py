@@ -229,7 +229,7 @@ def upload_patient_plan():
                     'date': (currentDate + timedelta(days=day)).strftime("%Y-%m-%d"),
                     'isCompleted': False
                 }
-                result = db_prescribed_exercises.insert_one(prescribed_exercise) 
+                insertResult = db_prescribed_exercises.insert_one(prescribed_exercise) 
 
     if result.upserted_id or result.modified_count > 0:
         return jsonify({'message': 'Plan updated successfully'}), 200
