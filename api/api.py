@@ -213,7 +213,7 @@ def upload_patient_plan():
     for day in range(totalDays):
         totalDates.append(currentDate + timedelta(days=day))
 
-    for day in totalDays:
+    for day in range(totalDays):
         for type in exercises:
             prescribed_exercise = {
                 'uniqueId': uniqueId,
