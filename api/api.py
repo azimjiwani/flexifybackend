@@ -60,7 +60,6 @@ def create_user():
         'weLastWeek': 0, 'weLastMonth': 0,'weAllTime': 0,
         'udLastWeek': 0, 'udLastMonth': 0,'udAllTime': 0,
         'rdLastWeek': 0, 'rdLastMonth': 0,'rdAllTime': 0,
-        # add all new fields
     }
 
     # Calculate rehabEnd
@@ -807,6 +806,18 @@ def get_exercises():
         output.append(data)
 
     return jsonify({'result': output})
+
+# Delete all user data
+@app.route('/delete-user/', methods=['DELETE'])
+def delete_user():
+    username = request.args.get('userName')
+    allCollections = db.list_collection_names()
+
+    for collectionName in allCollections:
+        collection = db[collectionName]
+        collection.delete_many({'userName' : username})
+        
+    return {'message': 'User data deleted successfully'}, 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)
