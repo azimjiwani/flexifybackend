@@ -516,6 +516,8 @@ def upload_exercise():
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
                 userNewValues['$set']['rdLastWeek'] = lastWeekPercentDifference
+            else:
+                return jsonify({'message': 'Last week entry not found'}), 309
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
