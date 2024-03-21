@@ -353,7 +353,7 @@ def upload_exercise():
 
     # get user from DB
     db_users = database.Users
-    user = db_users.find({'userName': username})
+    user = db_users.find_one({'userName': username})
 
     if user is not None:
         userWeek = user['currentWeek']
@@ -394,7 +394,7 @@ def upload_exercise():
             userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
         
         updateResult = db_users.update_one(userQuery, userNewValues)
-        
+
     else:
         return jsonify({'message': 'User not found'}), 404
 
