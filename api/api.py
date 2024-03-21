@@ -332,9 +332,9 @@ def get_completed_exercises():
             key: exercise[key] if exercise[key] is not None else -1000
             for key in [
                 'userName',
+                'exerciseName',
                 'name', 
                 'hand', 
-                'exerciseName'
                 'reps', 
                 'sets', 
                 'completedReps', 
