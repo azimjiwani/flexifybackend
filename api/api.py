@@ -207,7 +207,7 @@ def upload_patient_plan():
     totalDays = len(rehabWeeks) * len(rehabWeeks[0])
     dailyExerciseAmount = rehabWeeks[0][0]
     
-    currentDate = datetime.strptime(user['rehabStart'], '%Y-%m-%d')
+    currentDate = datetime.strptime(['rehabStart'], '%Y-%m-%d')
     totalDates = []
     for day in range(totalDays):
         totalDates.append(currentDate + timedelta(days=day))
@@ -236,7 +236,7 @@ def upload_patient_plan():
     if result.upserted_id or result.modified_count > 0:
         return jsonify({'message': 'Plan updated successfully'}), 200
     else:
-        return jsonify({'message': 'Failed to update plan'}), 500
+        return jsonify({'message': 'Failed to update plan'}), 404
 
 # Get patient plan
 @app.route('/get-patient-plan/', methods=['GET'])
