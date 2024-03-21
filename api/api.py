@@ -653,26 +653,40 @@ def get_exercise_data():
     db_user_maxes = database.Users
     userName = request.args.get('userName')
     output = {
-        'maxWristFlexion': [],
-        'maxWristExtension': [],
-        'maxUlnarDeviation': [],
-        'maxRadialDeviation': []
+        'maxWristFlexionArray': [],
+        'maxWristExtensionArray': [],
+        'maxUlnarDeviationArray': [],
+        'maxRadialDeviationArray': [],
+        'painArray': [],
+        'difficultyArray': [],
     }
 
     if userName is None:
         return jsonify({'message': 'Username is required'}), 400
     else:
+        userData = db_user_maxes.find({'userName': userName, 'isCompleted': True})
+        for data in userData:
+            output['maxWristFlexionArray'].append(data['maxWristFlexion'])
+            output['maxWristExtensionArray'].append(data['maxWristExtension'])
+            output['maxUlnarDeviationArray'].append(data['maxUlnarDeviation'])
+            output['maxRadialDeviationArray'].append(data['maxRadialDeviation'])
+            output['painArray'].append(data['painRating'])
+            output['difficultyArray'].append(data['difficultyRating'])
+
+        return jsonify({'result': output})
+
+
         # Fetch the completed exercises for each week
-        maxes = db_user_maxes.find({'userName': userName, 'status': 'completed'})
-        if maxes is not None:
-            for max in maxes:
-                week = max['week']
-                # Calculate the max values for each exercise type
-                output['maxWristFlexion'].append((week, max(exercise['wristFlexion'])))
-                output['maxWristExtension'].append((week, max(exercise['wristExtension'])))
-                output['maxUlnarDeviation'].append((week, max(exercise['ulnarDeviation'])))
-                output['maxRadialDeviation'].append((week, max(exercise['radialDeviation'])))
-            return jsonify(output)
+        
+        # if maxes is not None:
+        #     for max in maxes:
+        #         week = max['week']
+        #         # Calculate the max values for each exercise type
+        #         output['maxWristFlexion'].append((week, max(exercise['wristFlexion'])))
+        #         output['maxWristExtension'].append((week, max(exercise['wristExtension'])))
+        #         output['maxUlnarDeviation'].append((week, max(exercise['ulnarDeviation'])))
+        #         output['maxRadialDeviation'].append((week, max(exercise['radialDeviation'])))
+        #     return jsonify(output)
 
 # Get all-patients page data
 @app.route('/get-all-patients/', methods=['GET'])
