@@ -390,8 +390,8 @@ def upload_exercise():
         currentDate = datetime.now()
         diff = currentDate - userWeek
         currentWeek = diff.days // 7
-        if currentWeek < 1:
-            currentWeek = 1
+        # if currentWeek < 1:
+        #     currentWeek = 1
 
         # update user week, exercises completed, and max angles
         userQuery = {"userName": username}
