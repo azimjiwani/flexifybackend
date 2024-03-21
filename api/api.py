@@ -56,10 +56,10 @@ def create_user():
         'maxWristExtension': 0,
         'maxUlnarDeviation': 0,
         'maxRadialDeviation': 0,
-        'wfLastWeek': 0, 'wfLastMonth': 0,'wfAllTime': 0,
-        'weLastWeek': 0, 'weLastMonth': 0,'weAllTime': 0,
-        'udLastWeek': 0, 'udLastMonth': 0,'udAllTime': 0,
-        'rdLastWeek': 0, 'rdLastMonth': 0,'rdAllTime': 0,
+        'wfLastWeek': 1, 'wfLastMonth': 1,'wfAllTime': 1,
+        'weLastWeek': 1, 'weLastMonth': 1,'weAllTime': 1,
+        'udLastWeek': 1, 'udLastMonth': 1,'udAllTime': 1,
+        'rdLastWeek': 1, 'rdLastMonth': 1,'rdAllTime': 1,
     }
 
     # Calculate rehabEnd
