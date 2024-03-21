@@ -788,10 +788,10 @@ def get_exercises():
 @app.route('/delete-user/', methods=['DELETE'])
 def delete_user():
     username = request.args.get('userName')
-    allCollections = db.list_collection_names()
+    allCollections = database.list_collection_names()
 
     for collectionName in allCollections:
-        collection = db[collectionName]
+        collection = database[collectionName]
         collection.delete_many({'userName' : username})
         
     return {'message': 'User data deleted successfully'}, 200
