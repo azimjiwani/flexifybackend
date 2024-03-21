@@ -425,7 +425,7 @@ def upload_exercise():
             userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
 
             # all time percent difference
-            firstEntry = db_users.find_one({'userName': username, 'date': user['rehabStart']})
+            firstEntry = db_exercises.find_one({'userName': username, 'date': user['rehabStart']})
             if firstEntry is not None:
                 firstEntryMaxAngle = firstEntry['maxAngle']
                 allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
@@ -433,7 +433,7 @@ def upload_exercise():
 
             # last week percent difference
             lastWeek = datetime.now() - timedelta(days=7)
-            lastWeekEntry = db_users.find_one({'userName': username, 'date': str(lastWeek)})
+            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': str(lastWeek)})
             if lastWeekEntry is not None:
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
@@ -441,7 +441,7 @@ def upload_exercise():
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
-            lastMonthEntry = db_users.find_one({'userName': username, 'date': str(lastMonth)})
+            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': str(lastMonth)})
             if lastMonthEntry is not None:
                 lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
                 lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
@@ -451,7 +451,7 @@ def upload_exercise():
             userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
 
             # all time percent difference
-            firstEntry = db_users.find_one({'userName': username, 'date': user['rehabStart']})
+            firstEntry = db_exercises.find_one({'userName': username, 'date': user['rehabStart']})
             if firstEntry is not None:
                 firstEntryMaxAngle = firstEntry['maxAngle']
                 allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
@@ -459,7 +459,7 @@ def upload_exercise():
 
             # last week percent difference
             lastWeek = datetime.now() - timedelta(days=7)
-            lastWeekEntry = db_users.find_one({'userName': username, 'date': str(lastWeek)})
+            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': str(lastWeek)})
             if lastWeekEntry is not None:
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
@@ -467,7 +467,7 @@ def upload_exercise():
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
-            lastMonthEntry = db_users.find_one({'userName': username, 'date': str(lastMonth)})
+            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': str(lastMonth)})
             if lastMonthEntry is not None:
                 lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
                 lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
@@ -477,7 +477,7 @@ def upload_exercise():
             userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
 
             # all time percent difference
-            firstEntry = db_users.find_one({'userName': username, 'date': user['rehabStart']})
+            firstEntry = db_exercises.find_one({'userName': username, 'date': user['rehabStart']})
             if firstEntry is not None:
                 firstEntryMaxAngle = firstEntry['maxAngle']
                 allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
@@ -485,7 +485,7 @@ def upload_exercise():
 
             # last week percent difference
             lastWeek = datetime.now() - timedelta(days=7)
-            lastWeekEntry = db_users.find_one({'userName': username, 'date': str(lastWeek)})
+            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': str(lastWeek)})
             if lastWeekEntry is not None:
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
@@ -493,7 +493,7 @@ def upload_exercise():
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
-            lastMonthEntry = db_users.find_one({'userName': username, 'date': str(lastMonth)})
+            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': str(lastMonth)})
             if lastMonthEntry is not None:
                 lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
                 lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
@@ -503,7 +503,7 @@ def upload_exercise():
             userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
 
             # all time percent difference
-            firstEntry = db_users.find_one({'userName': username, 'date': user['rehabStart']})
+            firstEntry = db_exercises.find_one({'userName': username, 'date': user['rehabStart']})
             if firstEntry is not None:
                 firstEntryMaxAngle = firstEntry['maxAngle']
                 allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
@@ -511,7 +511,7 @@ def upload_exercise():
 
             # last week percent difference
             lastWeek = datetime.now() - timedelta(days=7)
-            lastWeekEntry = db_users.find_one({'userName': username, 'date': str(lastWeek)})
+            lastWeekEntry = db_exercises.find_one({'userName': username, 'date': str(lastWeek)})
             if lastWeekEntry is not None:
                 lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
                 lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
@@ -519,7 +519,7 @@ def upload_exercise():
 
             # last month percent difference
             lastMonth = datetime.now() - timedelta(days=30)
-            lastMonthEntry = db_users.find_one({'userName': username, 'date': str(lastMonth)})
+            lastMonthEntry = db_exercises.find_one({'userName': username, 'date': str(lastMonth)})
             if lastMonthEntry is not None:
                 lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
                 lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
@@ -534,132 +534,6 @@ def upload_exercise():
 
     else:
         return jsonify({'message': 'User not found'}), 404
-
-# User upload completed exercise
-# @app.route('/upload-completed-exercise/', methods=['POST'])
-# def upload_exercise():
-#     db_exercises = database.PrescribedExercises
-#     username = request.args.get('userName')
-#     uniqueId = request.args.get('uniqueId')
-#     content = request.get_json()
-
-#     myQuery = { "uniqueId": uniqueId}
-#     newValues = {"$set":
-#                  {"isCompleted": True,
-#                   "completedReps": content['completedReps'],
-#                   "completedSets": content['completedSets'],
-#                   "maxAngle": content['maxAngle'],
-#                   "difficultyRating": content['difficultyRating'],
-#                   "painRating": content['painRating'],
-#                   "notes": content['notes']}
-#                  }
-    
-#     result = db_exercises.update_one(myQuery,newValues)
-
-#     # get user from DB
-#     db_users = database.Users
-#     user = db_users.find_one({'userName': username})
-
-#     if user is not None:
-#         userWeek = user['currentWeek']
-
-#         userExercisesCompleted = user['exercisesCompleted']
-#         userMaxWristFlexion = user['maxWristFlexion']
-#         userMaxWristExtension = user['maxWristExtension']
-#         userMaxUlnarDeviation = user['maxUlnarDeviation']
-#         userMaxRadialDeviation = user['maxRadialDeviation']
-
-#         # compute number of weeks between userWeek and current date
-#         userWeek = datetime.strptime(user['rehabStart'], '%Y-%m-%d')
-#         currentDate = datetime.now()
-#         diff = currentDate - userWeek
-#         currentWeek = diff.days // 7
-#         if currentWeek < 1:
-#             currentWeek = 1
-
-#         # update user week
-#         userQuery = {"userName": username}
-#         userNewValues = {"$set": 
-#                         {
-#                             "currentWeek": currentWeek,
-#                             "exercisesCompleted": userExercisesCompleted + 1
-#                         }
-#                         }
-        
-#         if content['exerciseName'] == "Wrist Flexion":
-#             userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
-        
-#         elif content['exerciseName'] == "Wrist Extension":
-#             userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
-        
-#         elif content['exerciseName'] == "Ulnar Deviation":
-#             userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
-
-#         elif content['exerciseName'] == "Radial Deviation":
-#             userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
-        
-#         updateResult = db_users.update_one(userQuery, userNewValues)
-
-    # for exerciseName in ["Wrist Flexion", "Wrist Extension", "Ulnar Deviation", "Radial Deviation"]:
-
-    # all time percent difference
-    firstEntry = db_users.find_one({'userName': content['userName'], 'date': user['rehabStart']})
-    if firstEntry is not None:
-        firstEntryMaxAngle = firstEntry['maxAngle']
-        allTimePercentDifference = ((content['maxAngle'] - firstEntryMaxAngle) / firstEntryMaxAngle) * 100
-
-    # last week percent difference
-    lastWeek = datetime.now() - timedelta(days=7)
-    lastWeekEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastWeek)})
-    if lastWeekEntry is not None:
-        lastWeekEntryMaxAngle = lastWeekEntry['maxAngle']
-        lastWeekPercentDifference = ((content['maxAngle'] - lastWeekEntryMaxAngle) / lastWeekEntryMaxAngle) * 100
-
-    # last month percent difference
-    lastMonth = datetime.now() - timedelta(days=30)
-    lastMonthEntry = db_users.find_one({'userName': content['userName'], 'date': str(lastMonth)})
-    if lastMonthEntry is not None:
-        lastMonthEntryMaxAngle = lastMonthEntry['maxAngle']
-        lastMonthPercentDifference = ((content['maxAngle'] - lastMonthEntryMaxAngle) / lastMonthEntryMaxAngle) * 100
-
-    if result.modified_count > 0 and updateResult.modified_count > 0:
-        return jsonify({'message': 'Exercise uploaded and updated successfully'}), 200
-    else:
-        return jsonify({'message': 'Failed to upload and update exercise'}), 500
-    
-#     if result.matched_count > 0:
-#         if result.modified_count > 0:
-#             return jsonify({'message': 'Exercise updated successfully'}), 200
-#         else:
-#             return jsonify({'message': 'Exercise was already up-to-date'}), 200
-#     else:
-#         return jsonify({'message': 'No exercise matched the given query'}), 404
-    
-    # # Extract data from the JSON payload
-    # exercise_data = {
-    #     'exerciseName': content.get('name'),
-    #     'userName': content.get('userName'),
-    #     'description': content.get('description'),
-    #     'sets': content.get('sets'),
-    #     'reps': content.get('reps'),
-    #     'hand': content.get('hand'),
-    #     'completedSets': content.get('completedSets', 0),  # Default to 0 if not provided
-    #     'completedReps': content.get('completedReps', 0),  # Default to 0 if not provided
-    #     'maxAngle': content.get('maxAngle', 0.0),  # Default to 0.0 if not provided
-    #     'difficultyRating': content.get('difficultyRating', 0.0),  # Default to 'easy' if not provided
-    #     'painRating': content.get('painRating', 0.0),  # Default to 0.0 if not provided
-    #     'notes': content.get('notes', 'N/A'),  # Default to '' if not provided
-    #     'date': content.get('date', date.today().strftime("%Y/%m/%d")),  # Default to today's date in Y/M/D format if not provided
-    #     'isCompleted': content.get('isCompleted', True)  # Change to True when uploaded
-    # }
-
-    # # Insert the exercise data into the database
-    # result = db_exercises.insert_one(exercise_data)
-
-    # if result.inserted_id:
-    #     return jsonify({'message': 'Exercise uploaded successfully'}), 200
-    # else:
-    #     return jsonify({'message': 'Failed to upload exercise'}), 500
 
 # Get user info for mobile dashboard
 @app.route('/get-profile-data-app/', methods=['GET'])
