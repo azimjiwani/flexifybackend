@@ -354,6 +354,9 @@ def upload_exercise():
     # get user from DB
     db_users = database.Users
 
+    if uniqueId is None:
+        return jsonify({'message': 'Unique ID is required'}), 400
+
     if username is None:
         return jsonify({'message': 'Username is required'}), 300
     
