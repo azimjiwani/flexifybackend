@@ -38,6 +38,10 @@ def create_user():
     else:
         hand = False
 
+    rehabStart = content.get('rehabStart')
+    if isinstance(rehabStart, datetime.datetime):
+        rehabStart = rehabStart.strftime('%Y-%m-%d')
+
     # Extract data from the JSON payload
     user_data = {
         'firstName': content.get('firstName'),
@@ -48,7 +52,7 @@ def create_user():
         'dateOfBirth': content.get('dateOfBirth'),
         'hand': hand,
         'injury': content.get('injury'),
-        'rehabStart': content.get('rehabStart'),
+        'rehabStart': rehabStart,
         'injuryTime': content.get('injuryTime'),
         'targetWristFlexion': content.get('targetWristFlexion'),
         'targetWristExtension': content.get('targetWristExtension'),
