@@ -388,16 +388,16 @@ def upload_exercise():
                         }
                         }
         
-        if content['exerciseName'] == "Wrist Flexion":
+        if content['name'] == "Wrist Flexion":
             userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
         
-        elif content['exerciseName'] == "Wrist Extension":
+        elif content['name'] == "Wrist Extension":
             userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
         
-        elif content['exerciseName'] == "Ulnar Deviation":
+        elif content['name'] == "Ulnar Deviation":
             userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
 
-        elif content['exerciseName'] == "Radial Deviation":
+        elif content['name'] == "Radial Deviation":
             userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
         
         updateResult = db_users.update_one(userQuery, userNewValues)
