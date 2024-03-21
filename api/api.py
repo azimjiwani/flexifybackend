@@ -185,7 +185,6 @@ def upload_patient_plan():
     db_valid_exercises = database.ValidExercises
     db_users = database.Users
     content = request.get_json()
-    uniqueId = str(uuid.uuid4())
 
     # Extract the username from the JSON payload
     username = content['userName']
@@ -205,32 +204,31 @@ def upload_patient_plan():
     rehabStart = user['rehabStart']
     
     totalDays = len(rehabWeeks) * len(rehabWeeks[0])
-    dailyExerciseAmount = rehabWeeks[0][0]
-    
+
     currentDate = datetime.strptime(['rehabStart'], '%Y-%m-%d')
-    totalDates = []
-    for day in range(totalDays):
-        totalDates.append(currentDate + timedelta(days=day))
 
     for day in range(totalDays):
-        for type in exercises:
-            prescribed_exercise = {
-                'uniqueId': uniqueId,
-                'userName': username,
-                'exerciseName': type,
-                'hand': hand,
-                'reps': reps[day//7],
-                'sets': sets[day//7],
-                'completedReps': 0,
-                'completedSets': 0,
-                'maxAngle': 0,
-                'difficultyRating': 0,
-                'painRating': 0,
-                'notes': 'N/A',
-                'date': totalDates[day].strftime("%Y-%m-%d"),
-                'isCompleted': False
-            }
-            for session in range(dailyExerciseAmount-1):
+        if day % 7 == 0:
+            dailyExerciseAmount = rehabWeeks[day//7][0]
+        for session in range(dailyExerciseAmount):
+            for type in exercises:
+                uniqueId = str(uuid.uuid4())
+                prescribed_exercise = {
+                    'uniqueId': uniqueId,
+                    'userName': username,
+                    'exerciseName': type,
+                    'hand': hand,
+                    'reps': reps[day//7],
+                    'sets': sets[day//7],
+                    'completedReps': 0,
+                    'completedSets': 0,
+                    'maxAngle': 0,
+                    'difficultyRating': 0,
+                    'painRating': 0,
+                    'notes': 'N/A',
+                    'date': (currentDate + timedelta(days=day)).strftime("%Y-%m-%d"),
+                    'isCompleted': False
+                }
                 result = db_prescribed_exercises.insert_one(prescribed_exercise) 
 
     if result.upserted_id or result.modified_count > 0:
