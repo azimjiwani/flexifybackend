@@ -191,7 +191,10 @@ def upload_patient_plan():
     
     totalDays = len(rehabWeeks) * len(rehabWeeks[0])
 
-    currentDate = datetime.strptime(rehabStart, '%Y-%m-%d')
+    if isinstance(rehabStart, datetime.datetime):
+        currentDate = rehabStart
+    else:
+        currentDate = datetime.strptime(rehabStart, '%Y-%m-%d')
 
     for day in range(totalDays):
         if day % 7 == 0:
