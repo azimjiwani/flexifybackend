@@ -353,7 +353,7 @@ def upload_exercise():
 
     # get user from DB
     db_users = database.Users
-    user = db_users.find_one({'userName': content['userName']})
+    user = db_users.find_one({'userName': username})
     userWeek = user['currentWeek']
     userExercisesCompleted = user['exercisesCompleted']
     userMaxWristFlexion = user['maxWristFlexion']
