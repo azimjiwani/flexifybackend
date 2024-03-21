@@ -354,43 +354,47 @@ def upload_exercise():
     # get user from DB
     db_users = database.Users
     user = db_users.find_one({'userName': username})
-    userWeek = user['currentWeek']
-    userExercisesCompleted = user['exercisesCompleted']
-    userMaxWristFlexion = user['maxWristFlexion']
-    userMaxWristExtension = user['maxWristExtension']
-    userMaxUlnarDeviation = user['maxUlnarDeviation']
-    userMaxRadialDeviation = user['maxRadialDeviation']
+    print(user)
 
-    # compute number of weeks between userWeek and current date
-    userWeek = datetime.strptime(user['rehabStart'], '%Y-%m-%d')
-    currentDate = datetime.now()
-    diff = currentDate - userWeek
-    currentWeek = diff.days // 7
-    if currentWeek < 1:
-        currentWeek = 1
+    if user is None:
+        userWeek = user['currentWeek']
 
-    # update user week
-    userQuery = {"userName": username}
-    userNewValues = {"$set": 
-                     {
-                         "currentWeek": currentWeek,
-                         "exercisesCompleted": userExercisesCompleted + 1
-                      }
-                     }
-    
-    if content['exerciseName'] == "Wrist Flexion":
-        userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
-    
-    elif content['exerciseName'] == "Wrist Extension":
-        userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
-    
-    elif content['exerciseName'] == "Ulnar Deviation":
-        userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
+        userExercisesCompleted = user['exercisesCompleted']
+        userMaxWristFlexion = user['maxWristFlexion']
+        userMaxWristExtension = user['maxWristExtension']
+        userMaxUlnarDeviation = user['maxUlnarDeviation']
+        userMaxRadialDeviation = user['maxRadialDeviation']
 
-    elif content['exerciseName'] == "Radial Deviation":
-        userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
-    
-    updateResult = db_users.update_one(userQuery, userNewValues)
+        # compute number of weeks between userWeek and current date
+        userWeek = datetime.strptime(user['rehabStart'], '%Y-%m-%d')
+        currentDate = datetime.now()
+        diff = currentDate - userWeek
+        currentWeek = diff.days // 7
+        if currentWeek < 1:
+            currentWeek = 1
+
+        # update user week
+        userQuery = {"userName": username}
+        userNewValues = {"$set": 
+                        {
+                            "currentWeek": currentWeek,
+                            "exercisesCompleted": userExercisesCompleted + 1
+                        }
+                        }
+        
+        if content['exerciseName'] == "Wrist Flexion":
+            userNewValues['$set']['maxWristFlexion'] = max(userMaxWristFlexion, content['maxAngle'])
+        
+        elif content['exerciseName'] == "Wrist Extension":
+            userNewValues['$set']['maxWristExtension'] = max(userMaxWristExtension, content['maxAngle'])
+        
+        elif content['exerciseName'] == "Ulnar Deviation":
+            userNewValues['$set']['maxUlnarDeviation'] = max(userMaxUlnarDeviation, content['maxAngle'])
+
+        elif content['exerciseName'] == "Radial Deviation":
+            userNewValues['$set']['maxRadialDeviation'] = max(userMaxRadialDeviation, content['maxAngle'])
+        
+        updateResult = db_users.update_one(userQuery, userNewValues)
 
     # for exerciseName in ["Wrist Flexion", "Wrist Extension", "Ulnar Deviation", "Radial Deviation"]:
 
