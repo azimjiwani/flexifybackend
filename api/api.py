@@ -552,8 +552,10 @@ def get_profile_data():
                     'firstName', 'lastName',
                     'userName',
                     'hand', 'injury',
-                    'rehabStart', 'rehabEnd'
-                    'goals',
+                    'rehabStart', 'rehabEnd',
+                    'goal1',
+                    'goal2',
+                    'goal3',
                 ]
             }
     return jsonify({'result': data})
